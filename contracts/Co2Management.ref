@@ -1,0 +1,19 @@
+pragma solidity ^0.4.17;
+
+
+contract Co2Management {
+    mapping (address => uint) public balances;
+
+    function Co2Management() public {
+        balances[msg.sender] = 1000000;
+    }
+
+    function transfer(address _to, uint _amount) public {
+        if (balances[msg.sender] < _amount) {
+            revert();
+        }
+
+        balances[msg.sender] -= _amount;
+        balances[_to] += _amount;
+    }
+}

@@ -1,0 +1,25 @@
+header.special.container
+    span.icon.fa-envelope
+    h2 Get In Touch
+    p Use the form below to give /dev/null a piece of your mind.
+// One
+section.wrapper.style4.special.container(class='75%')
+    // Content
+    .content
+        form
+            .row(class='50%')
+                div(class='6u 12u(mobile)')
+                    input(type='text', name='name', placeholder='Name')
+                div(class='6u 12u(mobile)')
+                    input(type='text', name='email', placeholder='Email')
+            .row(class='50%')
+                div(class="12u")
+                    input(type='text', name='subject', placeholder='Subject')
+            .row(class='50%')
+                div(class="12u")
+                    textarea(name='message', placeholder='Message', rows='7')
+            .row
+                div(class="12u")
+                    ul.buttons
+                        li
+                            input.special(type='submit', value='Send Message')
