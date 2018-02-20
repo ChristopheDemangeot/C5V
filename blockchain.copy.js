@@ -1,54 +1,47 @@
-// Some refs
-// http://hypernephelist.com/2016/12/13/compile-deploy-ethereum-smart-contract-web3-solc.html
-// https://gist.github.com/tomconte/4edb83cf505f1e7faf172b9252fff9bf
-// https://github.com/ethereum/solc-js#from-version-021
-// https://www.npmjs.com/package/array-events
-
-// https://www.npmjs.com/package/ethereumjs-testrpc
-
-var appStart = new Object();
 var Web3 = require('web3');
 var fs = require('fs');
 var solc = require('solc');
 var EventedArray = require('array-events');
+var Promise = require('promise');
 
 var isLocalBlockchain = true;
 var localBlockchainUrl = 'http://localhost:8545';
 var remoteBlockchainUrl = 'https://blabla.azure.net:8545'; // Clearly needs to be updated
 var defaultGas = 90000;
-
 var smartContractFolder = './contracts';
 
-var web3Instance;
-
 function getBlockchainUrl() {
-    if(isLocalBlockchain)
+    if (isLocalBlockchain)
         return localBlockchainUrl;
     else
         return remoteBlockchainUrl;
 }
 
-function createWeb3() {
-    return new Web3(new Web3.providers.HttpProvider(getBlockchainUrl()));
-}
-
-function testBlockchainIsRunning() {
-    return web3Instance.isConnected();
-}
+var blockchainObject = new Object();
+blockchainObject.IsContractDeployed = false;
+blockchainObject.ContractName = '';
+blockchainObject.ContractClass = '';
+blockchainObject.ContractAddress = '';
+blockchainObject.ContractTransactionHash = '';
+blockchainObject.web3Instance = new Web3(new Web3.providers.HttpProvider(getBlockchainUrl()));
+blockchainObject.ContractArray = new EventedArray();
+blockchainObject.ContractArray.on('add', function (event) {
+    console.log('|----> New contract READY: ' + event.ContractName + ' at ' + event.ContractAddress);
+});
 
 function testContract(contractName, contractType, contractAddress) {
     // Reference to the deployed contract
     var testInstance = contractType.at(contractAddress);
 
     // We assume that call contract have a method called: testIsAlive
-    testInstance.testIsAlive({from: web3Instance.eth.coinbase}, (err, res) => {
+    testInstance.testIsAlive({ from: blockchainObject.web3Instance.eth.coinbase }, (err, res) => {
         if (err) {
             console.log('|----> Test call failed for ' + contractName + ': ' + err);
             return false;
         } else {
             console.log('|----> Test call to testIsAlive is OK for ' + contractName);
             console.log('|------> Result: ' + res);
-            appStart.ContractArray.push({ 'ContractName': contractName, 'ContractAddress': contractAddress });
+            blockchainObject.ContractArray.push({ 'ContractName': contractName, 'ContractAddress': contractAddress });
             return true;
         }
     });
@@ -64,76 +57,96 @@ function testContract(contractName, contractType, contractAddress) {
 }
 
 function prepareSmartContracts() {
-    console.log('Preparing smart contracts...');
-    fs.readdir(smartContractFolder, function(err, fileList) {
-        for (var i=0; i<fileList.length; i++) {
-            if(fileList[i].indexOf('.sol') > 0) {
+    return new Promise(function (fulfill, reject) {
+        blockchainObject.IsContractDeployed = false;
+
+        var fileList = fs.readdirSync(smartContractFolder);
+        for (var i = 0; i < fileList.length; i++) {
+            if (fileList[i].indexOf('.sol') > 0) {
                 console.log('|--> Processing: ' + fileList[i]);
                 var contractFile = fs.readFileSync(smartContractFolder + '/' + fileList[i]);
                 console.log('|----> Contract read from file');
                 var compiledContract = solc.compile(contractFile.toString(), 1);
 
-                if(compiledContract.errors === undefined) {
+                if (compiledContract.errors === undefined) {
                     console.log('|----> Contract compiled OK with solc version ' + solc.version());
 
                     // We are now making the STRONG assumption that the contract name is the name of the .sol file
                     var contractName = fileList[i].replace('.sol', '');
+                    blockchainObject.ContractName = contractName;
                     console.log('|----> Processing contract: ' + contractName);
-                    
+
                     var bytecode = compiledContract.contracts[':' + contractName].bytecode;
                     console.log('|----> Processed bytecode');
                     var abi = JSON.parse(compiledContract.contracts[':' + contractName].interface);
                     console.log('|----> Processed ABI');
-                    var contractClass = web3Instance.eth.contract(abi);
+                    var contractClass = blockchainObject.web3Instance.eth.contract(abi);
+                    blockchainObject.ContractClass = contractClass;
                     console.log('|----> Contract class created');
-    
+
                     var contractInstance = contractClass.new({
                         data: '0x' + bytecode,
-                        from: web3Instance.eth.coinbase,
+                        from: blockchainObject.web3Instance.eth.coinbase,
                         gas: defaultGas * 2
-                    }, (err, res) => {
+                    }, function (err, res) {
                         if (err) {
                             console.log('|----> Contract instance could not be created: ' + err);
+                            reject(err);
                         } else {
                             // Log the tx, you can explore status with eth.getTransaction()
                             console.log('|----> Contract instance hash: ' + res.transactionHash);
-                        
+                            blockchainObject.ContractTransactionHash = res.transactionHash;
+
                             // If we have an address property, the contract was deployed
                             if (res.address) {
                                 console.log('|----> Contract deployed SUCCESSFULLY!');
                                 console.log('|----> Contract instance address: ' + res.address);
-                                // Let's test the deployed contract
-                                testContract(contractName, contractClass, res.address);
+                                blockchainObject.ContractAddress = res.address;
+                                blockchainObject.IsContractDeployed = true;
+                                fulfill(blockchainObject.IsContractDeployed);
                             } else {
-                                console.log('|----> Awaiting deployment confirmation...');                       
+                                console.log('|----> Awaiting deployment confirmation...');
                             }
                         }
                     });
-    
                 } else {
                     console.log('|----> Contract DID NOT compile OK with solc version ' + solc.version());
                     console.log('|----> Error(s): ' + compiledContract.errors);
+                    reject(compiledContract.errors);
                 }
             }
         }
     });
 }
 
-appStart.ContractArray = new EventedArray();
-appStart.ContractArray.on('add', function(event) {
-    console.log('|----> New contract READY: ' + event.ContractName + ' at ' + event.ContractAddress);
-});
-
-appStart.InitialiseBlockchain = function() {
-    web3Instance = createWeb3();
-    console.log('Checking Blockchain available...');
-    if(testBlockchainIsRunning()) {
-        console.log('|--> Blockchain is OK on: ' + getBlockchainUrl());
-        prepareSmartContracts();
+blockchainObject.BlockchainUrl = function () {
+    return getBlockchainUrl();
+}
+blockchainObject.IsBlockchainRunning = function () {
+    return blockchainObject.web3Instance.isConnected();
+}
+blockchainObject.DeployContracts = function () {
+    console.log('DEPLOY: Checking Blockchain available...');
+    if (blockchainObject.IsBlockchainRunning()) {
+        console.log('DEPLOY: Blockchain is OK on ' + blockchainObject.BlockchainUrl());
+        return prepareSmartContracts().done(function () {
+            return blockchainObject.GetInformation();
+        });
     } else {
-        console.log('|--> Could not connect to Blockchain on: ' + getBlockchainUrl());
-        console.log('|--> Nothing further to do. App will not work');
+        console.log('DEPLOY: Could not connect to Blockchain on ' + blockchain.BlockchainUrl());
+        console.log('DEPLOY: Nothing further to do. App will not work');
+        return blockchainObject.GetInformation();
     }
-};
+}
+blockchainObject.GetInformation = function () {
+    return {
+        BCUrl: getBlockchainUrl(),
+        BCIsRunning: blockchainObject.IsBlockchainRunning(),
+        BCContractDeployed: blockchainObject.IsContractDeployed,
+        BCContractName: blockchainObject.ContractName,
+        BCContractAddress: blockchainObject.ContractAddress,
+        BCContractTransactionHash: blockchainObject.ContractTransactionHash
+    };
+}
 
-module.exports = appStart;
+module.exports = blockchainObject;

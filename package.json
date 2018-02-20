@@ -12,6 +12,7 @@
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "morgan": "~1.9.0",
+    "promise": "^8.0.1",
     "pug": "2.0.0-beta11",
     "serve-favicon": "~2.4.5",
     "solc": "^0.4.20",

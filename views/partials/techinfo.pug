@@ -1,0 +1,49 @@
+header.special.container
+    span.icon.fa-tty
+    h2 Technical information
+    p Find below information about the status of the blockchain application.
+// One
+section.wrapper.style4.special.container(class='75%')
+    // Content
+    .content
+        form
+            .row(class='50%')
+                div(class='4u 12u(mobile)')
+                   span.label Blockchain URL:
+                div(class='8u 12u(mobile)')
+                    input(type='text', id='bcLocation', name='bcLocation', placeholder='blockchain location', readonly='readonly')
+            .row(class='50%')
+                div(class='4u 12u(mobile)')
+                   span.label Is Online:
+                div(class='8u 12u(mobile)')
+                    i.icon.fa-check-circle.fa-2x(id='onlineOK', style='display:none;color:green;')
+                    i.icon.fa-times-circle.fa-2x(id='onlineNOK', style='display:none;color:red;')
+            .row(class='50%', style='display:none;', id='deployContractRow')
+                div(class='4u 12u(mobile)')
+                   span.label Contract status:
+                div(class='8u 12u(mobile)')
+                  input(type='button', id='bcDeployContract', name='bcDeployContract', value='Deploy C5V contract')
+            .row(class='50%', style='display:none;', id='alreadyDeployedRow')
+                div(class='4u 12u(mobile)')
+                   span.label Contract status:
+                div(class='8u 12u(mobile)')
+                  span.label(style='color:green;') Deployed!
+section.wrapper.style1.container.special(style='display:none;', id='showStatistics')
+  .row
+    div(class='6u 12u(narrower)')
+      section
+        header
+          h3 Current block
+        footer
+          ul.buttons
+            li
+              .button.small(id='currentBlock', style='cursor:default;') 123
+    div(class='6u 12u(narrower)')
+      section
+        header
+          h3 Test contract
+        footer
+          ul.buttons
+            li
+              input.button.small(type='button', id='testContract', value=' Click to test')
+                  

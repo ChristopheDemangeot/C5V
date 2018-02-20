@@ -1,9 +1,9 @@
-pragma solidity ^0.4.17;
+pragma solidity 0.4.20;
 
 
-contract Co2Management {
+contract C5VContract {
 
-    function Co2Management() public {
+    function C5VContract() public {
     }
 
     function testIsAlive() public pure returns (bool success) {

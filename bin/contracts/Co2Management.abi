@@ -1,0 +1,1 @@
+[{"constant":true,"inputs":[],"name":"testIsAlive","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"pure","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}]
