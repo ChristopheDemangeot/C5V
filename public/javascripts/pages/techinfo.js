@@ -51,7 +51,16 @@ function deployContract() {
 }
 
 function testContract(){
-    alert('test');
+    $('body').pleaseWait();
+    $.ajax({
+        url: "/api/test",
+    }).done(function (data) {
+        alert(data.TestResult);
+    }).fail(function() {
+        console.log('FAILED [GET]: /api/test');
+    }).always(function () {
+        $('body').pleaseWait('stop');
+    });
 }
 
 $(function () {

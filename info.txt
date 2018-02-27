@@ -9,3 +9,6 @@
 // https://www.npmjs.com/package/ethereumjs-testrpc
 
 https://www.promisejs.org/
+
+https://bitbucket.org/rhitchens2/soliditycrud/overview
+https://medium.com/@robhitchens/solidity-crud-part-1-824ffa69509a

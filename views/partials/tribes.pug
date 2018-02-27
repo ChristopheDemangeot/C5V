@@ -1,0 +1,29 @@
+header.special.container
+    span.icon.fa-users
+    h2 Tribes Management
+    p This page allows for the management of Tribes.
+// One
+section.wrapper.style4.special.container(class='75%')
+    .content(id='tribeList')
+        .row(class='50%')
+            div(class='6u 12u(mobile)')
+                | Tribe name
+            div(class='6u 12u(mobile)')
+                input(type='text', name='tribeName', placeholder='Tribe Name')            
+section.wrapper.style4.special.container(class='75%')
+    .content
+        .row(class='50%')
+            div(class="12u")
+                input(type='text', id='newTribeName', placeholder='Tribe Name')
+        .row
+            div(class="12u")
+                ul.buttons
+                    li
+                        input.special(type='submit', value='Create Tribe' id='createTribe')
+section.wrapper.style4.special.container(class='75%')
+    .content(id='tribeList')
+        .row(class='50%')
+            div(class='6u 12u(mobile)')
+                | Transaction hash
+            div(class='6u 12u(mobile)')
+                input(type='text', id='newTribeTransactionHash', placeholder='Transaction hash')                            

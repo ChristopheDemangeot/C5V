@@ -10,6 +10,7 @@ var contact = require('./routes/contact');
 var users = require('./routes/users');
 var help = require('./routes/help');
 var techinfo = require('./routes/techinfo');
+var tribes = require('./routes/tribes');
 
 var api = require('./routes/api');
 
@@ -35,6 +36,7 @@ app.use('/contact', contact);
 app.use('/users', users);
 app.use('/help', help);
 app.use('/techinfo', techinfo);
+app.use('/tribes', tribes);
 
 app.use('/api', api);
 
