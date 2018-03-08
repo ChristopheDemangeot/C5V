@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    // Main
+    article#main
+        include partials/adminCommon
+
+block pageScripts
+    script(src='javascripts/pages/users.js')
+    script(src='javascripts/pages/adminCommon.js')
+    script(type='text/javascript').
+        setEntityNames('#{entityName}', '#{entityNamePlural}');

@@ -28,11 +28,11 @@ router.get('/tribes', function (req, res, next) {
   res.json(listResults);
   console.log('REST[GET]: Leave /api/tribes');
 });
-router.get('/tribes/:tribeID', function (req, res, next)  {
-  console.log('REST[GET]: Enter /api/tribes/' + req.params.tribeID);
-  var result = blockchain.GetTribeByID(req.params.tribeID);
+router.get('/tribes/:objectID', function (req, res, next)  {
+  console.log('REST[GET]: Enter /api/tribes/' + req.params.objectID);
+  var result = blockchain.GetTribeByID(req.params.objectID);
   res.json(result);
-  console.log('REST[GET]: Leave /api/tribes/' + req.params.tribeID);
+  console.log('REST[GET]: Leave /api/tribes/' + req.params.objectID);
 });
 router.post('/tribes', function (req, res, next) {
   console.log('REST[POST]: Enter /api/tribes');
@@ -40,16 +40,50 @@ router.post('/tribes', function (req, res, next) {
   res.json(listResults);
   console.log('REST[POST]: Leave /api/tribes');
 });
-router.put('/tribes/:tribeID', function (req, res, next) {
-  console.log('REST[PUT]: Enter /api/tribes/' + req.params.tribeID);
+router.put('/tribes/:objectID', function (req, res, next) {
+  console.log('REST[PUT]: Enter /api/tribes/' + req.params.objectID);
   listResults = blockchain.UpdateTribe(req.body);
   res.json(listResults);
-  console.log('REST[PUT]: Leave /api/tribes/' + req.params.tribeID);
+  console.log('REST[PUT]: Leave /api/tribes/' + req.params.objectID);
 });
-router.delete('/tribes/:tribeID', function (req, res, next) {
-  console.log('REST[DELETE]: Enter /api/tribes/' + req.params.tribeID);
-  listResults = blockchain.DeleteTribe(req.params.tribeID);
+router.delete('/tribes/:objectID', function (req, res, next) {
+  console.log('REST[DELETE]: Enter /api/tribes/' + req.params.objectID);
+  listResults = blockchain.DeleteTribe(req.params.objectID);
   res.json(listResults);
-  console.log('REST[DELETE]: Leave /api/tribes/' + req.params.tribeID);
+  console.log('REST[DELETE]: Leave /api/tribes/' + req.params.objectID);
 });
+
+/* USERS Management*/
+router.get('/users', function (req, res, next) {
+  console.log('REST[GET]: Enter /api/users');
+  var listResults = blockchain.GetUserList();
+  res.json(listResults);
+  console.log('REST[GET]: Leave /api/users');
+});
+router.get('/users/:objectID', function (req, res, next)  {
+  console.log('REST[GET]: Enter /api/users/' + req.params.objectID);
+  var result = blockchain.GetUserByID(req.params.objectID);
+  res.json(result);
+  console.log('REST[GET]: Leave /api/users/' + req.params.objectID);
+});
+router.post('/users', function (req, res, next) {
+  console.log('REST[POST]: Enter /api/users');
+  listResults = blockchain.CreateNewUser(req.body);
+  res.json(listResults);
+  console.log('REST[POST]: Leave /api/users');
+});
+router.put('/users/:objectID', function (req, res, next) {
+  console.log('REST[PUT]: Enter /api/users/' + req.params.objectID);
+  listResults = blockchain.UpdateUser(req.body);
+  res.json(listResults);
+  console.log('REST[PUT]: Leave /api/users/' + req.params.objectID);
+});
+router.delete('/users/:objectID', function (req, res, next) {
+  console.log('REST[DELETE]: Enter /api/users/' + req.params.objectID);
+  listResults = blockchain.DeleteUser(req.params.objectID);
+  res.json(listResults);
+  console.log('REST[DELETE]: Leave /api/users/' + req.params.objectID);
+});
+
+/* Router export */
 module.exports = router;

@@ -7,10 +7,12 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var contact = require('./routes/contact');
-var users = require('./routes/users');
 var help = require('./routes/help');
-var techinfo = require('./routes/techinfo');
+
 var tribes = require('./routes/tribes');
+var users = require('./routes/users');
+
+var techinfo = require('./routes/techinfo');
 
 var api = require('./routes/api');
 

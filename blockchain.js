@@ -212,18 +212,18 @@ function getRandomWei() {
 function getRamdomHash() {
     return crypto.randomBytes(20).toString('hex');
 }
+
+/* Tribes */
 var localTribeList = {
     tribeList: [],
     transactionHash: getRamdomHash(),
     gasPrice: getRandomWei()
 };
-
 blockchainObject.GetTribeList = function() {
     console.log('BCJS - GetTribeList');
     console.log('BCJS - GetTribeList: ' + localTribeList.length);
     return localTribeList;
 }
-
 blockchainObject.GetTribeByID = function(tribeID) {
     console.log('BCJS - GetTribeByID: ' + tribeID);
     var result = {
@@ -298,4 +298,90 @@ blockchainObject.DeleteTribe = function(tribeID) {
     console.log('BCJS - DeleteTribe: Tribe deleted ' + tribeID);
     return list;
 }
+
+/* Users */
+var localUserList = {
+    objectList: [],
+    transactionHash: getRamdomHash(),
+    gasPrice: getRandomWei()
+};
+blockchainObject.GetUserList = function() {
+    console.log('BCJS - GetUserList: ' + localUserList.length);
+    return localUserList;
+}
+blockchainObject.GetUserByID = function(objectID) {
+    console.log('BCJS - GetUserByID: ' + objectID);
+    var result = {
+        objectList: [],
+        transactionHash: getRamdomHash(),
+        gasPrice: getRandomWei()
+    };
+    var selectedUser = {
+        objectID: -1,
+        objectName: 'NOT FOUND',
+        userEmail: 'NOT FOUND',
+        userMobile: 'NOT FOUND'
+    };
+    var list = blockchainObject.GetUserList();
+    for(var i=0; i<list.objectList.length; i++) {
+        var curUser = list.objectList[i];
+        if(curUser.objectID.toString() == objectID) {
+            selectedUser = curUser;
+        }
+    }
+    result.objectList.push(selectedUser);
+    console.log('BCJS - GetUserByID: Found ' + objectID);
+    return result;
+}
+blockchainObject.CreateNewUser = function(body) {
+    console.log('BCJS - CreateNewUser: Adding new User' + body.objectName);
+    var list = blockchainObject.GetUserList();
+    list.objectList.push(
+        {
+            objectID: getRamdomHash(),
+            objectName: body.objectName,
+            userEmail: body.userEmail,
+            userMobile: body.userMobile
+        });
+        list.transactionHash = getRamdomHash();
+        list.gasPrice = getRandomWei();
+    console.log('BCJS - CreateNewUser: New User added ' + body.objectName);
+    return list;
+}
+blockchainObject.UpdateUser = function(body) {
+    console.log('BCJS - UpdateUser: Updating User ' + body.objectName);
+    var list = blockchainObject.GetUserList();
+    for(var i=0; i<list.objectList.length; i++) {
+        var curUser = list.objectList[i];
+        if(curUser.objectID.toString() == body.objectID) {
+            list.objectList[i].objectName = body.objectName;
+            list.objectList[i].userEmail = body.userEmail;
+            list.objectList[i].userMobile = body.userMobile;
+            break;
+        }
+    }
+    list.transactionHash = getRamdomHash();
+    list.gasPrice = getRandomWei();
+    console.log('BCJS - UpdateUser: User updated ' + body.objectName);
+    return list;
+}
+blockchainObject.DeleteUser = function(objectID) {
+    console.log('BCJS - DeleteUser: Deleting User ' + objectID);
+    var list = blockchainObject.GetUserList();
+    for(var i=0; i<list.objectList.length; i++) {
+        var curUser = list.objectList[i];
+        if(curUser.objectID.toString() == objectID) {
+            list.objectList.splice(i,1);
+            break;
+        }
+    }
+    list.transactionHash = getRamdomHash();
+    list.gasPrice = getRandomWei();
+    console.log('BCJS - DeleteUser: User deleted ' + objectID);
+    return list;
+}
+
+
+
+/* Export */
 module.exports = blockchainObject;

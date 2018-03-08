@@ -1,0 +1,49 @@
+header.special.container
+    span.icon.fa-users
+    h2 #{entityNamePlural} Management
+    p This page allows for the management of #{entityNamePlural}.
+// One
+section.wrapper.style4.special.container(class='75%', id='objectListSection')
+    .content
+        .row(class='50%')
+            div(class='4u 12u(mobile) pull-left')
+                | Select #{entityName}
+            div(class='8u 12u(mobile)')
+                select(id='objectSelection', style='width: 100%;')
+        .row
+            div(class='12u')
+                ul.buttons
+                    li
+                        input.special(type='button', value='Delete ' + entityName, id='deleteObject', class='pull-right')                    
+                        | &nbsp;&nbsp;&nbsp;
+                        input.special(type='button', value='New ' + entityName, id='newObject', class='pull-left')
+
+section.wrapper.style4.special.container(class='75%', id='newObjectSection')
+    .content
+        .row(class='50%')
+            div(class='4u 12u(mobile) pull-left')
+                | Name:
+            div(class="8u 12u(mobile)")
+                input(type='text', id='newObjectName', placeholder=entityName + ' name')
+        if partialView == 'users'
+            include users
+        .row
+            div(class='12u')
+                ul.buttons
+                    li
+                        input.special(type='button', value='Cancel' id='cancelCreateObject', class='pull-left')
+                        | &nbsp;&nbsp;&nbsp;
+                        input.special(type='button', value='Create ' + entityName, id='createNewObject', class='pull-right')
+                        input.special(type='button', value='Update ' + entityName, id='updateObject', class='pull-right')
+section.wrapper.style4.special.container(class='75%')
+    .content(id='objectBCInfo')
+        .row(class='50%')
+            div(class='4u 12u(mobile) pull-left')
+                | Transaction hash
+            div(class='8u 12u(mobile)')
+                input(type='text', id='transactionHash', placeholder='Transaction hash', readonly)
+        .row(class='50%')
+            div(class='4u 12u(mobile) pull-left')
+                | Gas price
+            div(class='8u 12u(mobile)')
+                input(type='text', id='gasPrice', placeholder='Gas price', readonly)
