@@ -1,4 +1,4 @@
-header.special.container
+header.special.container(id='objectContainer')
     span.icon.fa-users
     h2 #{entityNamePlural} Management
     p This page allows for the management of #{entityNamePlural}.
@@ -35,6 +35,7 @@ section.wrapper.style4.special.container(class='75%', id='newObjectSection')
                         | &nbsp;&nbsp;&nbsp;
                         input.special(type='button', value='Create ' + entityName, id='createNewObject', class='pull-right')
                         input.special(type='button', value='Update ' + entityName, id='updateObject', class='pull-right')
+
 section.wrapper.style4.special.container(class='75%')
     .content(id='objectBCInfo')
         .row(class='50%')

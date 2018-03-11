@@ -1,5 +1,7 @@
 var entityName = '';
 var entityNamePlural = '';
+var defaultScrollTime = 300;
+var initialLoad = true;
 
 function setEntityNames(name, namePlural) {
     entityName = name;
@@ -10,23 +12,54 @@ function getApiUrl() {
     return '/api/' + entityNamePlural;
 }
 
+function sortObjectList() { 
+    var selectedObjectID = '';
+    $("#objectSelection option:selected" ).each(function() {
+        selectedObjectID = $(this).attr('id');
+    });
+
+    var opts_list = $('#objectSelection').find('option');
+    opts_list.sort(function(a, b) { return $(a).text() > $(b).text() ? 1 : -1; });
+    $('#objectSelection').html('').append(opts_list);
+
+    var selectedObjectPosition = 1;
+    $.each($('#objectSelection option'), function(index, value) {
+        if($(value).attr('id') == selectedObjectID) {
+            selectedObjectPosition = index + 1;
+        }
+    });
+    $('#objectSelection :nth-child(' + selectedObjectPosition + ')').prop('selected', true);
+}
+
 function populateDropDown(data) {
-    $('#objectSelection').html('<option id="0">No ' + entityName + ' Found!</option>');
+    var emptyOption = '<option id="0">No ' + entityName + ' Found!</option>';
     $('#deleteObject').hide();
     var fullHtml = '';
-    var isFirst = true;
+
+    var curObjectName = $('#newObjectName').val();
+    var selectedObjectPosition = -1;
+
     $.each(data.objectList, function(index, value) {
-        if(isFirst) {
-            fullHtml += '<option id="' + value.objectID + '" selected>' + value.objectName + '</option>';
-            isFirst = false;
-        } else
-            fullHtml += '<option id="' + value.objectID + '">' + value.objectName + '</option>';
+        fullHtml += '<option id="' + value.objectID + '">' + value.objectName + '</option>';
+        if(curObjectName == value.objectName) {
+            selectedObjectPosition = index + 1;
+        }
     });
+
     if(fullHtml.length > 0) {
         $('#objectSelection').html(fullHtml);
-        $('#objectSelection :nth-child(1)').prop('selected', true);
+        if(selectedObjectPosition > 0){
+            $('#objectSelection :nth-child(' + selectedObjectPosition + ')').prop('selected', true);
+            sortObjectList();
+        } else {
+            sortObjectList();
+            $('#objectSelection :nth-child(1)').prop('selected', true);
+        }
+
         changeSelectedObject();
         $('#deleteObject').show();
+    } else {
+        $('#objectSelection').html(emptyOption);
     }
     $('#transactionHash').val(data.transactionHash);
     $('#gasPrice').val(data.gasPrice);
@@ -36,6 +69,7 @@ function populateDropDown(data) {
 
 function initialisePageData() {
     $('body').pleaseWait();
+
     var ajaxUrl = getApiUrl();
     $.ajax({
         url: ajaxUrl
@@ -43,7 +77,6 @@ function initialisePageData() {
         populateDropDown(data);
 
         if(initialisePageDataExt != undefined)  initialisePageDataExt(data);
-
     }).fail(function() {
         console.log('FAILED [GET]: ' + ajaxUrl + ' failed!');
         $('#objectSelection').html('<option id="-1">ERROR</option>');
@@ -51,7 +84,7 @@ function initialisePageData() {
         $('#gasPrice').val('ERROR');   
     }).always(function () {
         $('body').pleaseWait('stop');
-    });
+    });    
 }
 
 function displayNewObject(e) {
@@ -61,6 +94,8 @@ function displayNewObject(e) {
     $('#updateObject').hide();
 
     if(displayNewObjectExt != undefined) displayNewObjectExt(e);
+
+    $(window).scrollTo($('#newObjectSection'), defaultScrollTime);
 }
 
 function cancelNewObject(e) {
@@ -70,10 +105,13 @@ function cancelNewObject(e) {
     $('#updateObject').hide();
 
     if(cancelNewObjectExt != undefined) cancelNewObjectExt(e);
+
+    $(window).scrollTo($('#objectContainer'), defaultScrollTime);
 }
 
 function createNewObject(e) {
     $('body').pleaseWait();
+
     var ajaxUrl = getApiUrl();
     var objData = { objectName: $('#newObjectName').val() };
 
@@ -86,8 +124,8 @@ function createNewObject(e) {
     }).done(function (data) {
         populateDropDown(data);
         cancelNewObject(undefined);
-        $('#objectSelection :nth-child(' + data.objectList.length + ')').prop('selected', true);
         changeSelectedObject();
+        $(window).scrollTo($('#newObjectSection'), defaultScrollTime);
     }).fail(function() {
         console.log('FAILED [POST]: ' + ajaxUrl + ' failed!');
         $('#transactionHash').val('ERROR');
@@ -99,6 +137,7 @@ function createNewObject(e) {
 
 function updateObject(e) {
     $('body').pleaseWait();
+
     var ajaxUrl = getApiUrl();
     var selectedObjectID = '';
     $( "#objectSelection option:selected" ).each(function() {
@@ -121,6 +160,7 @@ function updateObject(e) {
         populateDropDown(data);
         cancelNewObject(undefined);
         changeSelectedObject();
+        $(window).scrollTo($('#newObjectSection'), defaultScrollTime);
     }).fail(function() {
         console.log('FAILED [PUT]: ' + ajaxUrl + ' failed!');
         $('#transactionHash').val('ERROR');
@@ -132,6 +172,7 @@ function updateObject(e) {
 
 function deleteObject(e) {
     $('body').pleaseWait();
+
     var ajaxUrl = getApiUrl();
     var selectedObjectID = '';
     $( "#objectSelection option:selected" ).each(function() {
@@ -145,6 +186,7 @@ function deleteObject(e) {
         populateDropDown(data);
         cancelNewObject(undefined);
         changeSelectedObject();
+        $(window).scrollTo($('#objectContainer'), defaultScrollTime);
     }).fail(function() {
         console.log('FAILED [DELETE]: ' + ajaxUrl + ' failed!');
         $('#transactionHash').val('ERROR');
@@ -156,11 +198,13 @@ function deleteObject(e) {
 
 function changeSelectedObject() {
      $('body').pleaseWait();
+
     var ajaxUrl = getApiUrl();
     var selectedObjectID = '';
     $( "#objectSelection option:selected" ).each(function() {
         selectedObjectID += $(this).attr('id');
     });
+    
     ajaxUrl = ajaxUrl + '/' + selectedObjectID;
     $.ajax({
          url: ajaxUrl
@@ -174,6 +218,13 @@ function changeSelectedObject() {
         $('#objectListSection').show();
         $('#createNewObject').hide();
         $('#updateObject').show();
+        if(!initialLoad){
+            $(window).scrollTo($('#newObjectSection'), defaultScrollTime);
+            initialLoad = false;
+        } else {
+            $(window).scrollTo($('#objectContainer'), defaultScrollTime);
+            initialLoad = false;
+        }
     }).fail(function() {
         console.log('FAILED [GET]: ' + ajaxUrl + ' failed!');
         $('#transactionHash').val('ERROR');
