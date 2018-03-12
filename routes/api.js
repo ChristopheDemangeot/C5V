@@ -56,7 +56,7 @@ router.delete('/tribes/:objectID', function (req, res, next) {
 /* USERTYPES Management*/
 router.get('/usertypes', function (req, res, next) {
   console.log('REST[GET]: Enter /api/usertypes');
-  var listResults = blockchain.GeUserTypeList();
+  var listResults = blockchain.GetUserTypeList();
   res.json(listResults);
   console.log('REST[GET]: Leave /api/usertypes');
 });
@@ -97,6 +97,14 @@ router.delete('/users/:objectID', function (req, res, next) {
   listResults = blockchain.DeleteUser(req.params.objectID);
   res.json(listResults);
   console.log('REST[DELETE]: Leave /api/users/' + req.params.objectID);
+});
+
+/* EAC (Environmental Accounting Collection) Management */
+router.get('/eactypes', function (req, res, next) {
+  console.log('REST[GET]: Enter /api/eactypes');
+  var listResults = blockchain.GetEACTypeList();
+  res.json(listResults);
+  console.log('REST[GET]: Leave /api/eactypes');
 });
 
 /* Router export */

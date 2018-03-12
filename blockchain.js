@@ -191,6 +191,25 @@ function getRamdomHash() {
     return crypto.randomBytes(20).toString('hex');
 }
 
+/* EAC Types */
+var localEACTypeList = {
+    objectList: [],
+    transactionHash: getRamdomHash(),
+    gasPrice: getRandomWei()
+};
+localEACTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Illegal Logging' });
+localEACTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Traditional Use' });
+localEACTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Clearing' });
+localEACTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'PSP Measurement' });
+localEACTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Climate Monitoring' });
+localEACTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Fire' });
+localEACTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Soil Erosion' });
+
+blockchainObject.GetEACTypeList = function() {
+    console.log('BCJS - GetEACTypeList: ' + localEACTypeList.objectList.length);
+    return localEACTypeList;
+}
+
 /* User Types */
 var localUserTypeList = {
     objectList: [],
@@ -203,8 +222,8 @@ localUserTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Proj
 localUserTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Local Bio Diversity Stewards of tribe' });
 localUserTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Local Community Stewards of tribe' });
 
-blockchainObject.GeUserTypeList = function() {
-    console.log('BCJS - GeUserTypeList: ' + localTribeList.objectList.length);
+blockchainObject.GetUserTypeList = function() {
+    console.log('BCJS - GeUserTypeList: ' + localUserTypeList.objectList.length);
     return localUserTypeList;
 }
 blockchainObject.GetUserTypeByID = function(objectID) {
@@ -218,7 +237,7 @@ blockchainObject.GetUserTypeByID = function(objectID) {
         objectID: -1,
         objectName: 'NOT FOUND'
     };
-    var list = blockchainObject.GeUserTypeList();
+    var list = blockchainObject.GetUserTypeList();
     for(var i=0; i<list.objectList.length; i++) {
         var curUserType = list.objectList[i];
         if(curUserType.objectID.toString() == objectID) {
