@@ -424,5 +424,33 @@ blockchainObject.DeleteUser = function(objectID) {
     return list;
 }
 
+/* Data structure */
+var localDataList = {
+    objectList: [],
+    transactionHash: getRamdomHash(),
+    gasPrice: getRandomWei()
+};
+blockchainObject.CreateNewDataEntry = function(body) {
+    console.log('BCJS - CreateNewDataEntry: Adding new Data Entry');
+    localDataList.objectList.push(
+        {
+            objectID: getRamdomHash(),
+            userID: body.userID,
+            eacTypeID: body.eacTypeID,
+            dataDBH: body.dataDBH,
+            dataTClass: body.dataTClass,
+            dataTCount: body.dataTCount,
+            dataTHeight: body.dataTHeight,
+            dataTMorality: body.dataTMorality,
+            dataTLoc: body.dataTLoc,
+            dataGLoc: body.dataGLoc,
+            timeStamp: new Date().toISOString()
+        });
+        localDataList.transactionHash = getRamdomHash();
+        localDataList.gasPrice = getRandomWei();
+    console.log('BCJS - CreateNewDataEntry: New Data Entry added');
+    return localDataList;
+}
+
 /* Export */
 module.exports = blockchainObject;

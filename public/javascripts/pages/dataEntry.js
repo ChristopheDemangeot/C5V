@@ -58,6 +58,10 @@ function getUserTypeList() {
     });
 }
 
+function displaySuccess() {
+    alert('New Reading Added!');
+}
+
 function populateDropDownExt(data) {
 }
 
@@ -65,7 +69,7 @@ function submitData(e) {
     $('body').pleaseWait();
 
     var ajaxUrl = '/api/data';
-    var objData = { };
+    var objData = {};
     var selectedObjectID = '';
 
     $("#objectSelection option:selected" ).each(function() {
@@ -76,9 +80,9 @@ function submitData(e) {
     $("#dataEACList option:selected" ).each(function() {
         selectedObjectID = $(this).attr('id');
     });
-    objData.EACTypeID = selectedObjectID;
+    objData.eacTypeID = selectedObjectID;
     
-    objData.DBH = $('#dataDBH').val();
+    objData.dataDBH = $('#dataDBH').val();
     objData.dataTClass = $('#dataTClass').val();
     objData.dataTCount = $('#dataTCount').val();
     objData.dataTHeight = $('#dataTHeight').val();
@@ -91,6 +95,7 @@ function submitData(e) {
         url: ajaxUrl,
         data: objData
     }).done(function (data) {
+        displaySuccess();
     }).fail(function() {
         console.log('FAILED [POST]: ' + ajaxUrl + ' failed!');
         $('#transactionHash').val('ERROR');
