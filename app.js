@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var help = require('./routes/help');
+var dashboard = require('./routes/dashboard');
 var dataentry = require('./routes/dataentry');
 
 var tribes = require('./routes/tribes');
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/index', index);
 app.use('/help', help);
+app.use('/dashboard', dashboard);
 app.use('/dataentry', dataentry);
 
 app.use('/tribes', tribes);

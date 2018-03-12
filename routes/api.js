@@ -108,6 +108,12 @@ router.get('/eactypes', function (req, res, next) {
 });
 
 /* DATA ENTRY Management */
+router.get('/data', function (req, res, next) {
+  console.log('REST[GET]: Enter /api/data');
+  var listResults = blockchain.GetDataEntryList();
+  res.json(listResults);
+  console.log('REST[GET]: Leave /api/data');
+});
 router.post('/data', function (req, res, next) {
   console.log('REST[POST]: Enter /api/data');
   var listResults = blockchain.CreateNewDataEntry(req.body);

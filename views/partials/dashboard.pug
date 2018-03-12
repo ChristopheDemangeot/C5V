@@ -1,0 +1,40 @@
+header.special.container(id='objectContainer')
+  span.icon.fa-chart-line
+  h2
+    strong Dashboard and Data Analytics
+  p Current data stored in blockchain
+  p
+  p
+  section.wrapper.style4.special.container(class='100%', id='dataContainer')
+    .content
+      table#bcData.display(cellspacing='0', width='100%')
+        thead
+          tr
+            th Name
+            th Role
+            th Tribe
+            th EAC Type
+            th Date
+            th Location
+            th Details
+        tbody(id='tableContent')
+          tr
+            td NO DATA
+            td NO DATA
+            td NO DATA
+            td NO DATA
+            td NO DATA
+            td NO DATA
+            td LINK POPUP
+section.wrapper.style4.special.container(class='75%')
+    .content(id='objectBCInfo')
+        .row(class='50%')
+            div(class='4u 12u(mobile) pull-left')
+                | Transaction hash
+            div(class='8u 12u(mobile)')
+                input(type='text', id='transactionHash', placeholder='Transaction hash', readonly)
+        .row(class='50%')
+            div(class='4u 12u(mobile) pull-left')
+                | Gas price
+            div(class='8u 12u(mobile)')
+                input(type='text', id='gasPrice', placeholder='Gas price', readonly)

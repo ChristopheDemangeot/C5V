@@ -1,0 +1,15 @@
+extends layoutHome
+
+block pageCSS
+    link(rel='stylesheet', type='text/css', href='DataTables/datatables.min.css')
+
+block content
+    // Main
+    article#main
+        include partials/dashboard
+
+block pageScripts
+    script(src='DataTables/datatables.min.js')
+    script(src='javascripts/pages/dashboard.js')
+    script(src='javascripts/jquery.pleaseWait.js')
+    script(src='javascripts/jquery.scrollTo.min.js')

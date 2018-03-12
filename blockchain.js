@@ -341,6 +341,8 @@ var localUserList = {
 };
 blockchainObject.GetUserList = function() {
     console.log('BCJS - GetUserList: ' + localUserList.objectList.length);
+    localUserList.transactionHash = getRamdomHash();
+    localUserList.gasPrice = getRandomWei();
     return localUserList;
 }
 blockchainObject.GetUserByID = function(objectID) {
@@ -367,6 +369,8 @@ blockchainObject.GetUserByID = function(objectID) {
         }
     }
     result.objectList.push(selectedUser);
+    result.transactionHash = getRamdomHash();
+    result.gasPrice = getRandomWei();
     console.log('BCJS - GetUserByID: Found ' + objectID);
     return result;
 }
@@ -430,6 +434,12 @@ var localDataList = {
     transactionHash: getRamdomHash(),
     gasPrice: getRandomWei()
 };
+blockchainObject.GetDataEntryList = function() {
+    console.log('BCJS - GetDataEntryList: ' + localDataList.objectList.length);
+    localDataList.transactionHash = getRamdomHash();
+    localDataList.gasPrice = getRandomWei();
+    return localDataList;
+}
 blockchainObject.CreateNewDataEntry = function(body) {
     console.log('BCJS - CreateNewDataEntry: Adding new Data Entry');
     localDataList.objectList.push(
