@@ -340,7 +340,8 @@ blockchainObject.GetUserByID = function(objectID) {
         userEmail: 'NOT FOUND',
         userPassword: 'NOT FOUND',
         userMobile: 'NOT FOUND',
-        userTypeID: 'NOT FOUND'
+        userTypeID: 'NOT FOUND',
+        tribeID: 'NOT FOUND'
     };
     var list = blockchainObject.GetUserList();
     for(var i=0; i<list.objectList.length; i++) {
@@ -363,7 +364,8 @@ blockchainObject.CreateNewUser = function(body) {
             userEmail: body.userEmail,
             userPassword: body.userPassword,
             userMobile: body.userMobile,
-            userTypeID: body.userTypeID
+            userTypeID: body.userTypeID,
+            tribeID: body.tribeID
         });
         list.transactionHash = getRamdomHash();
         list.gasPrice = getRandomWei();
@@ -381,6 +383,7 @@ blockchainObject.UpdateUser = function(body) {
             list.objectList[i].userPassword = body.userPassword;
             list.objectList[i].userMobile = body.userMobile;
             list.objectList[i].userTypeID = body.userTypeID;
+            list.objectList[i].tribeID = body.tribeID;
             break;
         }
     }
