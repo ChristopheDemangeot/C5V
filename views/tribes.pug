@@ -3,7 +3,10 @@ extends layout
 block content
     // Main
     article#main
-        include partials/tribes
+        include partials/adminCommon
 
 block pageScripts
     script(src='javascripts/pages/tribes.js')
+    script(src='javascripts/pages/adminCommon.js')
+    script(type='text/javascript').
+        setEntityNames('#{entityName}', '#{entityNamePlural}');

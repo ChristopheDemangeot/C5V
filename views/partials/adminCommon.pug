@@ -25,8 +25,12 @@ section.wrapper.style4.special.container(class='75%', id='newObjectSection')
                 | Name:
             div(class="8u 12u(mobile)")
                 input(type='text', id='newObjectName', placeholder=entityName + ' name')
+
         if partialView == 'users'
             include users
+        if partialView == 'tribes'
+            include tribes
+
         .row
             div(class='12u')
                 ul.buttons

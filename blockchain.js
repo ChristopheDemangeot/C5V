@@ -215,87 +215,86 @@ function getRamdomHash() {
 
 /* Tribes */
 var localTribeList = {
-    tribeList: [],
+    objectList: [],
     transactionHash: getRamdomHash(),
     gasPrice: getRandomWei()
 };
 blockchainObject.GetTribeList = function() {
-    console.log('BCJS - GetTribeList');
     console.log('BCJS - GetTribeList: ' + localTribeList.length);
     return localTribeList;
 }
-blockchainObject.GetTribeByID = function(tribeID) {
-    console.log('BCJS - GetTribeByID: ' + tribeID);
+blockchainObject.GetTribeByID = function(objectID) {
+    console.log('BCJS - GetTribeByID: ' + objectID);
     var result = {
-        tribeList: [],
+        objectList: [],
         transactionHash: getRamdomHash(),
         gasPrice: getRandomWei()
     };
     var selectedTribe = {
-        tribeID: -1,
-        tribeName: 'NOT FOUND',
+        objectID: -1,
+        objectName: 'NOT FOUND',
         tribeLocation: 'NOT FOUND',
         tribePopulation: 'NOT FOUND',
         tribeArea: 'NOT FOUND'
     };
     var list = blockchainObject.GetTribeList();
-    for(var i=0; i<list.tribeList.length; i++) {
-        var curTribe = list.tribeList[i];
-        if(curTribe.tribeID.toString() == tribeID) {
+    for(var i=0; i<list.objectList.length; i++) {
+        var curTribe = list.objectList[i];
+        if(curTribe.objectID.toString() == objectID) {
             selectedTribe = curTribe;
         }
     }
-    result.tribeList.push(selectedTribe);
-    console.log('BCJS - GetTribeByID: Found ' + tribeID);
+    result.objectList.push(selectedTribe);
+    console.log('BCJS - GetTribeByID: Found ' + objectID);
     return result;
 }
 blockchainObject.CreateNewTribe = function(body) {
-    console.log('BCJS - CreateNewTribe: Adding new Tribe' + body.tribeName);
-    var tribeList = blockchainObject.GetTribeList();
-    tribeList.tribeList.push(
+    console.log('BCJS - CreateNewTribe: Adding new Tribe ' + body.objectName);
+    var list = blockchainObject.GetTribeList();
+    list.objectList.push(
         {
-            tribeID: getRamdomHash(),
-            tribeName: body.tribeName,
+            objectID: getRamdomHash(),
+            objectName: body.objectName,
             tribeLocation: body.tribeLocation,
             tribePopulation: body.tribePopulation,
             tribeArea: body.tribeArea
         });
-        tribeList.transactionHash = getRamdomHash();
-        tribeList.gasPrice = getRandomWei();
-    console.log('BCJS - CreateNewTribe: New tribe added ' + body.tribeName);
-    return tribeList;
-}
-blockchainObject.UpdateTribe = function(body) {
-    console.log('BCJS - UpdateTribe: Updating Tribe ' + body.tribeName);
-    var list = blockchainObject.GetTribeList();
-    for(var i=0; i<list.tribeList.length; i++) {
-        var curTribe = list.tribeList[i];
-        if(curTribe.tribeID.toString() == body.tribeID) {
-            list.tribeList[i].tribeName = body.tribeName;
-            list.tribeList[i].tribeLocation = body.tribeLocation;
-            list.tribeList[i].tribePopulation = body.tribePopulation;
-            list.tribeList[i].tribeArea = body.tribeArea;
-            break;
-        }
-    }
-    list.transactionHash = getRamdomHash();
-    list.gasPrice = getRandomWei();
-    console.log('BCJS - UpdateTribe: Tribe updated ' + body.tribeName);
+        list.transactionHash = getRamdomHash();
+        list.gasPrice = getRandomWei();
+    console.log('BCJS - CreateNewTribe: New tribe added ' + body.objectName);
     return list;
 }
-blockchainObject.DeleteTribe = function(tribeID) {
-    console.log('BCJS - DeleteTribe: Deleting Tribe ' + tribeID);
+blockchainObject.UpdateTribe = function(body) {
+    console.log('BCJS - UpdateTribe: Updating Tribe ' + body.objectName);
     var list = blockchainObject.GetTribeList();
-    for(var i=0; i<list.tribeList.length; i++) {
-        var curTribe = list.tribeList[i];
-        if(curTribe.tribeID.toString() == tribeID) {
-            list.tribeList.splice(i,1);
+    for(var i=0; i<list.objectList.length; i++) {
+        var curTribe = list.objectList[i];
+        if(curTribe.objectID.toString() == body.objectID) {
+            list.objectList[i].objectName = body.objectName;
+            list.objectList[i].tribeLocation = body.tribeLocation;
+            list.objectList[i].tribePopulation = body.tribePopulation;
+            list.objectList[i].tribeArea = body.tribeArea;
             break;
         }
     }
     list.transactionHash = getRamdomHash();
     list.gasPrice = getRandomWei();
-    console.log('BCJS - DeleteTribe: Tribe deleted ' + tribeID);
+    console.log('BCJS - UpdateTribe: Tribe updated ' + body.objectName);
+    return list;
+}
+blockchainObject.DeleteTribe = function(objectID) {
+    console.log('BCJS - DeleteTribe: Deleting Tribe ' + objectID);
+    var list = blockchainObject.GetTribeList();
+    for(var i=0; i<list.objectList.length; i++) {
+        var curTribe = list.objectList[i];
+        if(curTribe.objectID.toString() == objectID) {
+            list.objectList.splice(i,1);
+            break;
+        }
+    }
+    list.transactionHash = getRamdomHash();
+    list.gasPrice = getRandomWei();
+    console.log('BCJS - DeleteTribe: Tribe deleted ' + objectID);
     return list;
 }
 
@@ -334,7 +333,7 @@ blockchainObject.GetUserByID = function(objectID) {
     return result;
 }
 blockchainObject.CreateNewUser = function(body) {
-    console.log('BCJS - CreateNewUser: Adding new User' + body.objectName);
+    console.log('BCJS - CreateNewUser: Adding new User ' + body.objectName);
     var list = blockchainObject.GetUserList();
     list.objectList.push(
         {

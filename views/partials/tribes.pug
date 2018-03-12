@@ -1,62 +1,15 @@
-header.special.container
-    span.icon.fa-users
-    h2 Tribes Management
-    p This page allows for the management of Tribes.
-// One
-section.wrapper.style4.special.container(class='75%', id='tribeListSection')
-    .content
-        .row(class='50%')
-            div(class='4u 12u(mobile) pull-left')
-                | Select Tribe
-            div(class='8u 12u(mobile)')
-                select(id='tribeSelection', style='width: 100%;')
-        .row
-            div(class='12u')
-                ul.buttons
-                    li
-                        input.special(type='button', value='Delete Tribe' id='deleteTribe', class='pull-right')                    
-                        | &nbsp;&nbsp;&nbsp;
-                        input.special(type='button', value='New Tribe' id='newTribe', class='pull-left')
-
-section.wrapper.style4.special.container(class='75%', id='newTribeSection')
-    .content
-        .row(class='50%')
-            div(class='4u 12u(mobile) pull-left')
-                | Name:
-            div(class="8u 12u(mobile)")
-                input(type='text', id='newTribeName', placeholder='Tribe name')
-        .row(class='50%')
-            div(class='4u 12u(mobile) pull-left')
-                | Location:
-            div(class='8u 12u(mobile)')
-                input(type='text', id='newTribeLocation', placeholder='Tribe location')
-        .row(class='50%')
-            div(class='4u 12u(mobile) pull-left')
-                | Population:
-            div(class='8u 12u(mobile)')
-                input(type='text', id='newTribePopulation', placeholder='Tribe population')
-        .row(class='50%')
-            div(class='4u 12u(mobile) pull-left')
-                | Area:
-            div(class='8u 12u(mobile)')
-                input(type='text', id='newTribeArea', placeholder='Tribe area')
-        .row
-            div(class='12u')
-                ul.buttons
-                    li
-                        input.special(type='button', value='Cancel' id='cancelCreateTribe', class='pull-left')
-                        | &nbsp;&nbsp;&nbsp;
-                        input.special(type='button', value='Create Tribe' id='createNewTribe', class='pull-right')
-                        input.special(type='button', value='Update Tribe' id='updateTribe', class='pull-right')
-section.wrapper.style4.special.container(class='75%')
-    .content(id='tribeBCInfo')
-        .row(class='50%')
-            div(class='4u 12u(mobile) pull-left')
-                | Transaction hash
-            div(class='8u 12u(mobile)')
-                input(type='text', id='transactionHash', placeholder='Transaction hash', readonly)
-        .row(class='50%')
-            div(class='4u 12u(mobile) pull-left')
-                | Gas price
-            div(class='8u 12u(mobile)')
-                input(type='text', id='gasPrice', placeholder='Gas price', readonly)                            
+.row(class='50%')
+    div(class='4u 12u(mobile) pull-left')
+        | Location:
+    div(class='8u 12u(mobile)')
+        input(type='text', id='newTribeLocation', placeholder='Tribe location')
+.row(class='50%')
+    div(class='4u 12u(mobile) pull-left')
+        | Population:
+    div(class='8u 12u(mobile)')
+        input(type='text', id='newTribePopulation', placeholder='Tribe population')
+.row(class='50%')
+    div(class='4u 12u(mobile) pull-left')
+        | Area:
+    div(class='8u 12u(mobile)')
+        input(type='text', id='newTribeArea', placeholder='Tribe area')                      
