@@ -136,30 +136,6 @@ function prepareSmartContract() {
     }
 }
 
-function getTribeList() {
-
-}
-
-function createTribe(newTribeName) {
-    console.log('createTribe: ENTER');
-
-    var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
-
-    contractInstance.createTribe({ from: blockchainObject.web3Instance.eth.coinbase, tribeName: newTribeName }, function(err, res) {
-        if (err) {
-            console.log('createTribe: Call failed for ' + blockchainObject.contractName + ' -> ' + err);
-        } else {
-            console.log('createTribe: Call to createTribe is OK for ' + blockchainObject.contractName);
-            console.log('createTribe: Result -> ' + res);
-        }
-    })
-
-    console.log('createTribe: LEAVE');
-    return {tribeList: [
-        {tribeID: 1, tribeName: newTribeName}
-    ]}
-}
-
 /********************************************************************************** */
 /*** API Calls ***/
 /********************************************************************************** */
@@ -206,8 +182,8 @@ blockchainObject.TestContract = function() {
     };
 }
  /* FAKE CALLS */
- /* Common */
 
+ /* Common */
 function getRandomWei() {
     return (Math.floor(Math.random() * Math.floor(1000)) / 10000) + ' wei';
 }
@@ -407,8 +383,6 @@ blockchainObject.DeleteUser = function(objectID) {
     console.log('BCJS - DeleteUser: User deleted ' + objectID);
     return list;
 }
-
-
 
 /* Export */
 module.exports = blockchainObject;
