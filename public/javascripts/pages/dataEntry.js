@@ -59,7 +59,17 @@ function getUserTypeList() {
 }
 
 function displaySuccess() {
-    alert('New Reading Added!');
+    $('#infoSuccess').show();
+    $(window).scrollTo($('#objectContainer'), 300);
+    setTimeout("$('#infoSuccess').hide();", 2000);
+
+    $('#dataEACList :nth-child(1)').prop('selected', true);
+    $('#dataDBH').val('');
+    $('#dataTClass').val('');
+    $('#dataTCount').val('');
+    $('#dataTHeight').val('');
+    $('#dataTMorality').val('');
+    $('#dataTLoc').val('');
 }
 
 function populateDropDownExt(data) {
@@ -119,6 +129,8 @@ function initialisePageDataExt(data) {
     $('#actionBottomRow').show();
     $('#SubmitData').click(submitData);
 
+    $('#infoSuccess').hide();
+
     if(getLocationForm != undefined) getLocationForm();
 }
 
@@ -140,3 +152,41 @@ function changeSelectedObjectExt(data) {
     getUserTypeByID(data.userTypeID);
     getTribeByID(data.tribeID);
 }
+
+/* Google maps */
+var map, infoWindow;
+function initMap() {
+  map = new google.maps.Map(document.getElementById('googleMap'), {
+    center: {lat: -35.3075699, lng: 149.1099161},
+    zoom: 10
+  });
+  infoWindow = new google.maps.InfoWindow;
+
+  // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      infoWindow.setPosition(pos);
+      infoWindow.setContent('Location found.');
+      infoWindow.open(map);
+      map.setCenter(pos);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.');
+  infoWindow.open(map);
+} 
