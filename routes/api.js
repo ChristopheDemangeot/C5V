@@ -53,6 +53,14 @@ router.delete('/tribes/:objectID', function (req, res, next) {
   console.log('REST[DELETE]: Leave /api/tribes/' + req.params.objectID);
 });
 
+/* USERTYPES Management*/
+router.get('/usertypes', function (req, res, next) {
+  console.log('REST[GET]: Enter /api/usertypes');
+  var listResults = blockchain.GeUserTypeList();
+  res.json(listResults);
+  console.log('REST[GET]: Leave /api/usertypes');
+});
+
 /* USERS Management*/
 router.get('/users', function (req, res, next) {
   console.log('REST[GET]: Enter /api/users');

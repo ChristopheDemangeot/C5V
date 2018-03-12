@@ -206,11 +206,30 @@ blockchainObject.TestContract = function() {
     };
 }
  /* FAKE CALLS */
+ /* Common */
+
 function getRandomWei() {
     return (Math.floor(Math.random() * Math.floor(1000)) / 10000) + ' wei';
 }
 function getRamdomHash() {
     return crypto.randomBytes(20).toString('hex');
+}
+
+/* User Types */
+var localUserTypeList = {
+    objectList: [],
+    transactionHash: getRamdomHash(),
+    gasPrice: getRandomWei()
+};
+localUserTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'System Administrator' });
+localUserTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Project Manager' });
+localUserTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Project Superintendent of tribe' });
+localUserTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Local Bio Diversity Stewards of tribe' });
+localUserTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Local Community Stewards of tribe' });
+
+blockchainObject.GeUserTypeList = function() {
+    console.log('BCJS - GeUserTypeList: ' + localTribeList.objectList.length);
+    return localUserTypeList;
 }
 
 /* Tribes */
@@ -220,7 +239,7 @@ var localTribeList = {
     gasPrice: getRandomWei()
 };
 blockchainObject.GetTribeList = function() {
-    console.log('BCJS - GetTribeList: ' + localTribeList.length);
+    console.log('BCJS - GetTribeList: ' + localTribeList.objectList.length);
     return localTribeList;
 }
 blockchainObject.GetTribeByID = function(objectID) {
@@ -305,7 +324,7 @@ var localUserList = {
     gasPrice: getRandomWei()
 };
 blockchainObject.GetUserList = function() {
-    console.log('BCJS - GetUserList: ' + localUserList.length);
+    console.log('BCJS - GetUserList: ' + localUserList.objectList.length);
     return localUserList;
 }
 blockchainObject.GetUserByID = function(objectID) {
@@ -319,7 +338,9 @@ blockchainObject.GetUserByID = function(objectID) {
         objectID: -1,
         objectName: 'NOT FOUND',
         userEmail: 'NOT FOUND',
-        userMobile: 'NOT FOUND'
+        userPassword: 'NOT FOUND',
+        userMobile: 'NOT FOUND',
+        userTypeID: 'NOT FOUND'
     };
     var list = blockchainObject.GetUserList();
     for(var i=0; i<list.objectList.length; i++) {
@@ -340,7 +361,9 @@ blockchainObject.CreateNewUser = function(body) {
             objectID: getRamdomHash(),
             objectName: body.objectName,
             userEmail: body.userEmail,
-            userMobile: body.userMobile
+            userPassword: body.userPassword,
+            userMobile: body.userMobile,
+            userTypeID: body.userTypeID
         });
         list.transactionHash = getRamdomHash();
         list.gasPrice = getRandomWei();
@@ -355,7 +378,9 @@ blockchainObject.UpdateUser = function(body) {
         if(curUser.objectID.toString() == body.objectID) {
             list.objectList[i].objectName = body.objectName;
             list.objectList[i].userEmail = body.userEmail;
+            list.objectList[i].userPassword = body.userPassword;
             list.objectList[i].userMobile = body.userMobile;
+            list.objectList[i].userTypeID = body.userTypeID;
             break;
         }
     }
