@@ -1,4 +1,5 @@
 var express = require('express');
+var fileUpload = require('express-fileupload');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -32,6 +33,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(fileUpload());
 
 app.use('/', index);
 app.use('/index', index);
@@ -45,6 +47,24 @@ app.use('/users', users);
 app.use('/techinfo', techinfo);
 
 app.use('/api', api);
+
+app.post('/upload', function(req, res) {
+  if (!req.files)
+    return res.status(400).send('No files were uploaded.');
+ 
+  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+  var dataFile = req.files.dataFile;
+  
+  var appDir = path.dirname(require.main.filename);
+
+  // Use the mv() method to place the file somewhere on your server
+  dataFile.mv('C:/CODE/Blockchain/C5V/public/upload/' + 'filename.jpg', function(err) {
+    if (err)
+      return res.status(500).send(err);
+ 
+    res.send('File uploaded!');
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

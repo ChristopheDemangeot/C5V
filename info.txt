@@ -12,3 +12,5 @@ https://www.promisejs.org/
 
 https://bitbucket.org/rhitchens2/soliditycrud/overview
 https://medium.com/@robhitchens/solidity-crud-part-1-824ffa69509a
+
+https://stackoverflow.com/questions/10418644/creating-an-iframe-with-given-html-dynamically
