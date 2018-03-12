@@ -52,7 +52,6 @@ function populateDropDownExt(data) {
 }
 
 function initialisePageDataExt(data) {
-
 }
 
 function displayNewObjectExt(e) {

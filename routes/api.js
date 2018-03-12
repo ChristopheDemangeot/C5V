@@ -60,6 +60,12 @@ router.get('/usertypes', function (req, res, next) {
   res.json(listResults);
   console.log('REST[GET]: Leave /api/usertypes');
 });
+router.get('/usertypes/:objectID', function (req, res, next)  {
+  console.log('REST[GET]: Enter /api/usertypes/' + req.params.objectID);
+  var result = blockchain.GetUserTypeByID(req.params.objectID);
+  res.json(result);
+  console.log('REST[GET]: Leave /api/usertypes/' + req.params.objectID);
+});
 
 /* USERS Management*/
 router.get('/users', function (req, res, next) {

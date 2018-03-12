@@ -10,7 +10,7 @@ section.wrapper.style4.special.container(class='75%', id='objectListSection')
                 | Select #{entityName}
             div(class='8u 12u(mobile)')
                 select(id='objectSelection', style='width: 100%;')
-        .row
+        .row(id='actionTopRow')
             div(class='12u')
                 ul.buttons
                     li
@@ -20,7 +20,7 @@ section.wrapper.style4.special.container(class='75%', id='objectListSection')
 
 section.wrapper.style4.special.container(class='75%', id='newObjectSection')
     .content
-        .row(class='50%')
+        .row(class='50%', id='objectNameRow')
             div(class='4u 12u(mobile) pull-left')
                 | Name:
             div(class="8u 12u(mobile)")
@@ -30,8 +30,10 @@ section.wrapper.style4.special.container(class='75%', id='newObjectSection')
             include users
         if partialView == 'tribes'
             include tribes
+        if partialView == 'dataentry'
+            include dataentry
 
-        .row
+        .row(id='actionBottomRow')
             div(class='12u')
                 ul.buttons
                     li

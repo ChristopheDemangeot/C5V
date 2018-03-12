@@ -6,8 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var contact = require('./routes/contact');
 var help = require('./routes/help');
+var dataentry = require('./routes/dataentry');
 
 var tribes = require('./routes/tribes');
 var users = require('./routes/users');
@@ -34,11 +34,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/index', index);
-app.use('/contact', contact);
-app.use('/users', users);
 app.use('/help', help);
-app.use('/techinfo', techinfo);
+app.use('/dataentry', dataentry);
+
 app.use('/tribes', tribes);
+app.use('/users', users);
+
+app.use('/techinfo', techinfo);
 
 app.use('/api', api);
 

@@ -207,7 +207,28 @@ blockchainObject.GeUserTypeList = function() {
     console.log('BCJS - GeUserTypeList: ' + localTribeList.objectList.length);
     return localUserTypeList;
 }
-
+blockchainObject.GetUserTypeByID = function(objectID) {
+    console.log('BCJS - GetUserTypeByID: ' + objectID);
+    var result = {
+        objectList: [],
+        transactionHash: getRamdomHash(),
+        gasPrice: getRandomWei()
+    };
+    var selectedUserType = {
+        objectID: -1,
+        objectName: 'NOT FOUND'
+    };
+    var list = blockchainObject.GeUserTypeList();
+    for(var i=0; i<list.objectList.length; i++) {
+        var curUserType = list.objectList[i];
+        if(curUserType.objectID.toString() == objectID) {
+            selectedUserType = curUserType;
+        }
+    }
+    result.objectList.push(selectedUserType);
+    console.log('BCJS - GetUserTypeByID: Found ' + objectID);
+    return result;
+}
 /* Tribes */
 var localTribeList = {
     objectList: [],
