@@ -1,12 +1,12 @@
 # Links: https://github.com/GRMule/jquery.pleaseWait
 # Base contract implementation and using inheritance to support this: https://ethereumdev.io/inheritance-in-solidity/
 
-// http://hypernephelist.com/2016/12/13/compile-deploy-ethereum-smart-contract-web3-solc.html
-// https://gist.github.com/tomconte/4edb83cf505f1e7faf172b9252fff9bf
-// https://github.com/ethereum/solc-js#from-version-021
-// https://www.npmjs.com/package/array-events
+http://hypernephelist.com/2016/12/13/compile-deploy-ethereum-smart-contract-web3-solc.html
+https://gist.github.com/tomconte/4edb83cf505f1e7faf172b9252fff9bf
+https://github.com/ethereum/solc-js#from-version-021
+https://www.npmjs.com/package/array-events
 
-// https://www.npmjs.com/package/ethereumjs-testrpc
+https://www.npmjs.com/package/ethereumjs-testrpc
 
 https://www.promisejs.org/
 
@@ -14,3 +14,7 @@ https://bitbucket.org/rhitchens2/soliditycrud/overview
 https://medium.com/@robhitchens/solidity-crud-part-1-824ffa69509a
 
 https://stackoverflow.com/questions/10418644/creating-an-iframe-with-given-html-dynamically
+
+https://ethereum.stackexchange.com/questions/7255/deploy-contract-from-nodejs-using-web3
+
+https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9

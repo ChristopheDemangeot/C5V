@@ -51,9 +51,8 @@
     div(class='4u 12u(mobile) pull-left')
         | Photo:
     div(class="8u 12u(mobile)")
-        form#uploadForm(ref='uploadForm', action='/upload', method='post', enctype='multipart/form-data')
-            input(type='file', name='dataFile')
-            input(type='submit', value='Upload!')
+        iframe#iframeFileUpload
+
 .row(class='50%')
     div(class='4u 12u(mobile) pull-left')
         | Geo-location:

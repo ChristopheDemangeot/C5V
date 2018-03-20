@@ -7,15 +7,15 @@ function initialisePageView() {
         if (data.BCIsRunning) {
             $('#onlineOK').show();
             $('#onlineNOK').hide();
-            $('#showStatistics').show();
+
             if (data.BCContractDeployed) {
                 $('#deployContractRow').hide();
                 $('#alreadyDeployedRow').show();
-                $('#testContract').prop('disabled', false);
+                $('#showStatistics').show();
             } else {
                 $('#deployContractRow').show();
                 $('#alreadyDeployedRow').hide();
-                $('#testContract').prop('disabled', true);
+                $('#showStatistics').hide();
             }
         } else {
             $('#onlineOK').hide();
@@ -39,9 +39,11 @@ function deployContract() {
         if (data.BCContractDeployed) {
             $('#deployContractRow').hide();
             $('#alreadyDeployedRow').show();
+            $('#showStatistics').show();
         } else {
             $('#deployContractRow').show();
             $('#alreadyDeployedRow').hide();
+            $('#showStatistics').hide();
         }
     }).fail(function() {
         console.log('FAILED [GET]: /api/deploy');

@@ -9,8 +9,12 @@ var crypto = require('crypto');
 var isLocalBlockchain = true;
 var localBlockchainUrl = 'http://localhost:8545';
 var remoteBlockchainUrl = 'https://blabla.azure.net:8545'; // Clearly needs to be updated
-var defaultGas = 1000000;
 var smartContractFolder = './contracts';
+
+// http://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 function getBlockchainUrl() {
     if (isLocalBlockchain)
@@ -26,36 +30,33 @@ blockchainObject.ContractClass = '';
 blockchainObject.ContractAddress = '';
 blockchainObject.ContractTransactionHash = '';
 blockchainObject.web3Instance = new Web3(new Web3.providers.HttpProvider(getBlockchainUrl()));
+blockchainObject.MustUseBlockchain = true;
 
-// function testContact(){
-//     console.log('testContract: ENTER');
-//     var testInstance = contractClass.at(contractAddress);
-
-//     var testCallback = function(err, res) {
-//         if (err) {
-//             console.log('testContract: Test call failed for ' + contractName + ' -> ' + err);
-//             reject(err);
-//         } else {
-//             console.log('testContract: Test call to testIsAlive is OK for ' + contractName);
-//             console.log('testContract: Result -> ' + res);
-//             fulfill(res);
-//         }
-//     }
-
-//     // We assume that call contract have a method called: testIsAlive
-//     testInstance.testIsAlive({ from: blockchainObject.web3Instance.eth.coinbase }, testCallback );
-// }
-
+async function waitBlock(transactionHash, addressToSet) {
+    while (true) {
+      let receipt = blockchainObject.web3Instance.eth.getTransactionReceipt(transactionHash);
+      if (receipt && receipt.contractAddress) {
+        addressToSet = receipt.contractAddress;
+        console.log('prepareSmartContract: Contract deployed SUCCESSFULLY!');
+        console.log('prepareSmartContract: Contract instance address: ' + receipt.contractAddress);
+        console.log("prepareSmartContract: Smart contract mined!");
+        break;
+      }
+      console.log("prepareSmartContract: Waiting a mined block to include contract... currently in block " + blockchainObject.web3Instance.eth.blockNumber);
+      await sleep(1000);
+    }
+  }
 
 function testContract() {
     console.log('testContract: ENTER');
     if(blockchainObject.IsContractDeployed) {
         var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
         // We assume that call contract have a method called: testIsAlive   
-        var result = contractInstance.testIsAlive({ from: blockchainObject.web3Instance.eth.coinbase });
+        var result = contractInstance.isAlive();
         console.log('testContract: LEAVE - Result: ' + result);
         return result;
     } else {
+        console.log('testContract: LEAVE - Result: false');
         return false;
     }
 }
@@ -90,44 +91,21 @@ function prepareSmartContract() {
                 blockchainObject.ContractClass = contractClass;
                 console.log('prepareSmartContract: Contract class created');
 
-                var instanceCreationCallback = function(err, res) {
-                    if (err) {
-                        console.log('prepareSmartContract: Contract instance could not be created: ' + err);
-                    } else {
-                        // Log the tx, you can explore status with eth.getTransaction()
-                        console.log('prepareSmartContract: Contract instance hash: ' + res.transactionHash);
-                        blockchainObject.ContractTransactionHash = res.transactionHash;
-
-                        // If we have an address property, the contract was deployed
-                        if (res.address) {
-                            console.log('prepareSmartContract: Contract deployed SUCCESSFULLY!');
-                            console.log('prepareSmartContract: Contract instance address: ' + res.address);
-                            blockchainObject.ContractAddress = res.address;
-                            blockchainObject.IsContractDeployed = true;
-                        } else {
-                            console.log('prepareSmartContract: Awaiting deployment confirmation...');
-                        }
-                    }
-                };
-
-                var contractInstance = contractClass.new({
+                contractInstance = blockchainObject.ContractClass.new({
                     data: '0x' + bytecode,
                     from: blockchainObject.web3Instance.eth.coinbase,
-                    gas: defaultGas * 2
-                }, instanceCreationCallback);
-
-                // var contractInstance = contractClass.new({
-                //     data: '0x' + bytecode,
-                //     from: blockchainObject.web3Instance.eth.coinbase,
-                //     gas: defaultGas * 2
-                // });
-
-                waitUntil().interval(500).times(50).condition(function() {
-                    return blockchainObject.ContractAddress.length == 0;
-                }).done(function(result) {
-                    return;
+                    gas: 1000000
                 });
+                console.log('prepareSmartContract: Contract instance created');
 
+                if(contractInstance.transactionHash != undefined) {
+                    blockchainObject.ContractTransactionHash = contractInstance.transactionHash;
+                    console.log('prepareSmartContract: Contract instance hash: ' + blockchainObject.ContractTransactionHash);
+                    waitBlock(blockchainObject.ContractTransactionHash, blockchainObject.ContractAddress);
+                    blockchainObject.IsContractDeployed = true;
+                } else {
+                    blockchainObject.IsContractDeployed = false;
+                }
             } else {
                 console.log('prepareSmartContract: Contract DID NOT compile OK with solc version ' + solc.version());
                 console.log('prepareSmartContract: Error(s): ' + compiledContract.errors);
@@ -255,8 +233,44 @@ var localTribeList = {
     gasPrice: getRandomWei()
 };
 blockchainObject.GetTribeList = function() {
-    console.log('BCJS - GetTribeList: ' + localTribeList.objectList.length);
-    return localTribeList;
+    console.log('BCJS - GetTribeList: ENTER');
+
+    if(blockchainObject.MustUseBlockchain) {
+        var res = {
+            objectList: [],
+            transactionHash: getRamdomHash(),
+            gasPrice: getRandomWei()
+        };
+    
+        if(blockchainObject.IsContractDeployed) {
+            var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
+            // We assume that call contract have a method called: testIsAlive   
+            var tribeAddressList = contractInstance.getTribeAddressList();
+            var nbTribes = tribeAddressList.length;
+            console.log('BCJS - GetTribeList: Number of Tribe addresses found: ' + tribeAddressList.length);
+            if(nbTribes > 0) {
+                for(var i=0; i<nbTribes; i++) {
+                    var curTribe = contractInstance.getTribeByAddress(tribeAddressList[i]);
+                    res.objectList.push(
+                        {
+                            objectID: tribeAddressList[i],
+                            objectName: curTribe.name,
+                            tribeLocation: 'TODO',
+                            tribePopulation: 123,
+                            tribeArea: 'TODO'
+                        });
+                }
+            }
+        } else {
+            console.log('BCJS - GetTribeList: C5VContract not deployed');
+        }
+        console.log('BCJS - GetTribeList: LEAVE');
+        return res;
+    } else {
+        console.log('BCJS - GetTribeList: ' + localTribeList.objectList.length);
+        console.log('BCJS - GetTribeList: LEAVE');
+        return localTribeList;
+    }
 }
 blockchainObject.GetTribeByID = function(objectID) {
     console.log('BCJS - GetTribeByID: ' + objectID);
@@ -285,19 +299,57 @@ blockchainObject.GetTribeByID = function(objectID) {
 }
 blockchainObject.CreateNewTribe = function(body) {
     console.log('BCJS - CreateNewTribe: Adding new Tribe ' + body.objectName);
-    var list = blockchainObject.GetTribeList();
-    list.objectList.push(
-        {
-            objectID: getRamdomHash(),
-            objectName: body.objectName,
-            tribeLocation: body.tribeLocation,
-            tribePopulation: body.tribePopulation,
-            tribeArea: body.tribeArea
-        });
-        list.transactionHash = getRamdomHash();
-        list.gasPrice = getRandomWei();
-    console.log('BCJS - CreateNewTribe: New tribe added ' + body.objectName);
-    return list;
+
+    if(blockchainObject.MustUseBlockchain) {
+        if(blockchainObject.IsContractDeployed) {
+            var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
+
+            // Create a new account
+            var newAccountAddress = blockchainObject.web3Instance.personal.newAccount(body.objectName);
+            console.log('BCJS - CreateNewTribe: New account created at ' + newAccountAddress);
+
+            var gasPrice = Number(blockchainObject.web3Instance.eth.gasPrice);
+            console.log('BCJS - CreateNewTribe: Gas Price currently at:  ' + gasPrice + ' wei');
+
+            var callGas = Number(contractInstance.createTribe.estimateGas(body.objectName, body.tribeLocation, body.tribePopulation, body.tribeArea));
+            console.log('BCJS - CreateNewTribe: Estimated Gas for call:  ' + callGas + ' units');
+
+            var estCostWei = (gasPrice * callGas);
+            var estCostEth = blockchainObject.web3Instance.fromWei(estCostWei, 'ether');
+            console.log('BCJS - CreateNewTribe: Estimate cost:  ' + estCostWei + ' wei');
+            console.log('BCJS - CreateNewTribe: Estimate cost:  ' + estCostEth + ' eth');
+            var valueToTransfer = (estCostWei * 2);
+            console.log('BCJS - CreateNewTribe: Value to transfer:  ' + valueToTransfer + ' wei');
+
+            // http://www.bullraider.com/ethereum/tutorials/342-understanding-invalid-address-error-in-dapps-or-geth-console
+            blockchainObject.web3Instance.personal.unlockAccount(newAccountAddress,body.objectName,100000);
+            blockchainObject.web3Instance.eth.sendTransaction({from: blockchainObject.web3Instance.eth.coinbase, to: newAccountAddress, value: valueToTransfer});
+            // blockchainObject.web3Instance.eth.defaultAccount = newAccountAddress;
+
+            // Calls the method
+            // blockchainObject.web3Instance.eth.defaultAccount = blockchainObject.web3Instance.eth.coinbase;
+            var tribeIndex = contractInstance.createTribe(body.objectName, body.tribeLocation, body.tribePopulation, body.tribeArea, {from: newAccountAddress, gasPrice: 10}); // 9M
+
+            console.log('BCJS - CreateNewTribe: New tribe index ' + tribeIndex);
+            console.log('BCJS - CreateNewTribe: New tribe added ' + body.objectName);
+        } else {
+            console.log('BCJS - CreateNewTribe: C5VContract not deployed');
+        }
+        return blockchainObject.GetTribeList();
+    } else {
+        localTribeList.objectList.push(
+            {
+                objectID: getRamdomHash(),
+                objectName: body.objectName,
+                tribeLocation: body.tribeLocation,
+                tribePopulation: body.tribePopulation,
+                tribeArea: body.tribeArea
+            });
+            list.transactionHash = getRamdomHash();
+            list.gasPrice = getRandomWei();
+        console.log('BCJS - CreateNewTribe: New tribe added ' + body.objectName);
+        return localTribeList;
+    }
 }
 blockchainObject.UpdateTribe = function(body) {
     console.log('BCJS - UpdateTribe: Updating Tribe ' + body.objectName);

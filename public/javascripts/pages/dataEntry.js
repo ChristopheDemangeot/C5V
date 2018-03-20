@@ -132,6 +132,10 @@ function initialisePageDataExt(data) {
     $('#infoSuccess').hide();
 
     if(getLocationForm != undefined) getLocationForm();
+
+    var uploadIFrame = $('#iframeFileUpload');
+    var iframeUploadHTML = '<body><form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data"><input type="file" name="dataFile" /><input type="submit" value="Upload!" /></form></body>';
+    uploadIFrame.attr('src', 'data:text/html;charset=utf-8,' + encodeURI(iframeUploadHTML));
 }
 
 function displayNewObjectExt(e) {
