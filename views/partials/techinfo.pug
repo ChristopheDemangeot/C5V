@@ -3,7 +3,7 @@ header.special.container
     h2 Technical information
     p Find below information about the status of the blockchain application.
 // One
-section.wrapper.style4.special.container(class='75%')
+section.wrapper.style4.special.container(class='75%', id='deploySection')
     // Content
     .content
         form
@@ -28,7 +28,7 @@ section.wrapper.style4.special.container(class='75%')
                    span.label Contract status:
                 div(class='8u 12u(mobile)')
                   span.label(style='color:green;') Deployed!
-section.wrapper.style1.container.special(style='display:none;', id='showStatistics')
+section.wrapper.style4.container.special(style='display:none;', id='showStatistics', class='75%')
   .row
     div(class='6u 12u(narrower)')
       section
@@ -37,7 +37,7 @@ section.wrapper.style1.container.special(style='display:none;', id='showStatisti
         footer
           ul.buttons
             li
-              .button.small(id='currentBlock', style='cursor:default;') 123
+              .button.small(id='currentBlock', style='cursor:default;') 0
     div(class='6u 12u(narrower)')
       section
         header
@@ -45,5 +45,5 @@ section.wrapper.style1.container.special(style='display:none;', id='showStatisti
         footer
           ul.buttons
             li
-              input.button.small(type='button', id='testContract', value=' Click to test')
+              input.button.small(type='button', id='testContract', value='Click to test')
                   

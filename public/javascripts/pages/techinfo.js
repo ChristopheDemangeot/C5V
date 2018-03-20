@@ -32,7 +32,7 @@ function initialisePageView() {
 }
 
 function deployContract() {
-    $('body').pleaseWait();
+    $('#deploySection').pleaseWait();
     $.ajax({
         url: "/api/deploy",
     }).done(function (data) {
@@ -48,26 +48,38 @@ function deployContract() {
     }).fail(function() {
         console.log('FAILED [GET]: /api/deploy');
     }).always(function () {
-        $('body').pleaseWait('stop');
+        $('#deploySection').pleaseWait('stop');
     });
 }
 
+function resetTestContractButton() {
+    $('#testContract').css('background-color:white;');
+    $('#testContract').val('Click to test');
+}
+
 function testContract(){
-    $('body').pleaseWait();
+    $('#showStatistics').pleaseWait();
     $.ajax({
         url: "/api/test",
     }).done(function (data) {
-        alert(data.TestResult);
+        if(data.TestResult) {
+            $('#testContract').css('background-color:green;');
+            $('#testContract').val('OK!');
+        } else {
+            $('#testContract').css('background-color:red;');
+            $('#testContract').val('ERROR!');
+        }
     }).fail(function() {
         console.log('FAILED [GET]: /api/test');
     }).always(function () {
-        $('body').pleaseWait('stop');
+        $('#showStatistics').pleaseWait('stop');
+        setTimeout(resetTestContractButton, 2000);
     });
 }
 
 $(function () {
     $('#bcDeployContract').click(deployContract);
-    $('#testContract').prop('disabled', true);
     $('#testContract').click(testContract);
     initialisePageView();
+    resetTestContractButton();
 });

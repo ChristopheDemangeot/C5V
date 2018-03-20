@@ -32,11 +32,11 @@ blockchainObject.ContractTransactionHash = '';
 blockchainObject.web3Instance = new Web3(new Web3.providers.HttpProvider(getBlockchainUrl()));
 blockchainObject.MustUseBlockchain = true;
 
-async function waitBlock(transactionHash, addressToSet) {
+async function waitBlock(transactionHash) {
     while (true) {
       let receipt = blockchainObject.web3Instance.eth.getTransactionReceipt(transactionHash);
       if (receipt && receipt.contractAddress) {
-        addressToSet = receipt.contractAddress;
+        blockchainObject.ContractAddress = receipt.contractAddress;
         console.log('prepareSmartContract: Contract deployed SUCCESSFULLY!');
         console.log('prepareSmartContract: Contract instance address: ' + receipt.contractAddress);
         console.log("prepareSmartContract: Smart contract mined!");
@@ -101,7 +101,7 @@ function prepareSmartContract() {
                 if(contractInstance.transactionHash != undefined) {
                     blockchainObject.ContractTransactionHash = contractInstance.transactionHash;
                     console.log('prepareSmartContract: Contract instance hash: ' + blockchainObject.ContractTransactionHash);
-                    waitBlock(blockchainObject.ContractTransactionHash, blockchainObject.ContractAddress);
+                    waitBlock(blockchainObject.ContractTransactionHash);
                     blockchainObject.IsContractDeployed = true;
                 } else {
                     blockchainObject.IsContractDeployed = false;
