@@ -1,9 +1,22 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.21;
 
 
 contract C5VContract {
 
     address public contractOwner;
+
+    struct DataEntry {
+        address userID;
+        string eacTypeID;
+        string dataDBH;
+        string dataTClass;
+        uint dataTCount;
+        uint dataTHeight;
+        string dataTMorality;
+        string dataTLoc;
+        string dataGLoc;
+        string timeStamp;
+    }
 
     struct Tribe {
         uint index;
@@ -11,6 +24,7 @@ contract C5VContract {
         string location;
         uint population;
         string area;
+        DataEntry[] dataList;
     }
 
     mapping(address => Tribe) private tribeList;
@@ -46,6 +60,7 @@ contract C5VContract {
             for (uint index = 0; index < tribeAccounts.length; index++) {
                 if (areStringsEqual(tribeList[tribeAccounts[index]].name, tName)) {
                     exists = true;
+                    break;
                 }
             }
             return exists;
@@ -59,15 +74,34 @@ contract C5VContract {
         }
 
     function createTribe(string tName, string tLocation, uint tPopulation, string tArea)
-        public payable
-        returns(uint) {
-            // if (doesTribeExistsByAddress(msg.sender)) revert();
+        public payable {
+            if (doesTribeExistsByAddress(msg.sender)) revert();
             tribeList[msg.sender].name = tName;
             tribeList[msg.sender].location = tLocation;
             tribeList[msg.sender].population = tPopulation;
             tribeList[msg.sender].area = tArea;
             tribeList[msg.sender].index = tribeAccounts.push(msg.sender)-1;
-            return tribeAccounts.length-1;
+        }
+
+    function updateTribe(address tAddress, string tName, string tLocation, uint tPopulation, string tArea)
+        public payable {
+            if (!doesTribeExistsByAddress(tAddress)) revert();
+            tribeList[tAddress].name = tName;
+            tribeList[tAddress].location = tLocation;
+            tribeList[tAddress].population = tPopulation;
+            tribeList[tAddress].area = tArea;
+        }
+
+    function deleteTribe(address tAddress)
+        public payable {
+            if (!doesTribeExistsByAddress(tAddress)) revert();
+            for (uint index = 0; index < tribeAccounts.length; index++) {
+                if (tribeAccounts[index] == tAddress) {
+                    delete tribeList[tAddress];
+                    delete tribeAccounts[index];
+                    break;
+                }
+            }
         }
 
     function getTribeAddressList()
@@ -76,22 +110,11 @@ contract C5VContract {
             return tribeAccounts;
         }
 
-    // function getTribeList()
-    //     public view
-    //     returns(Tribe[]) {
-    //         return tribeAccounts;
-    //     }
-
     function getTribeByAddress(address tAddress)
-        public constant
-        returns(uint, string) {
+        public view
+        returns(uint, string, string, uint, string) {
             if (!doesTribeExistsByAddress(tAddress)) revert(); 
-            return (tribeList[tAddress].index, tribeList[tAddress].name);
-        }
-
-    function getTribeByIndex(uint index)
-        public constant
-        returns(uint, string) {
-            return (tribeList[tribeAccounts[index]].index, tribeList[tribeAccounts[index]].name);
+            return (tribeList[tAddress].index, tribeList[tAddress].name,
+                tribeList[tAddress].location, tribeList[tAddress].population, tribeList[tAddress].area);
         }
 }

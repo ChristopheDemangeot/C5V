@@ -57,7 +57,7 @@ function populateDropDown(data) {
         }
 
         changeSelectedObject();
-        $('#deleteObject').show();
+        //$('#deleteObject').show();
     } else {
         $('#objectSelection').html(emptyOption);
     }

@@ -18,3 +18,8 @@ https://stackoverflow.com/questions/10418644/creating-an-iframe-with-given-html-
 https://ethereum.stackexchange.com/questions/7255/deploy-contract-from-nodejs-using-web3
 
 https://hackernoon.com/6-reasons-why-javascripts-async-await-blows-promises-away-tutorial-c7ec10518dd9
+
+https://hackernoon.com/ether-purchase-power-df40a38c5a2f
+https://steemit.com/ethereum/@tomshwom/ethereum-gas-how-it-works
+
+https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html
