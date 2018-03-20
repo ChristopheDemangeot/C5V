@@ -11,6 +11,7 @@
         | Associated tribe:
     div(class="8u 12u(mobile)")
         input(type='text', id='userTribe', placeholder='Associated tribe', disabled='disabled')
+        input(type='hidden', id='userTribeID')
 .row(class='50%')
     div(class='4u 12u(mobile) pull-left')
         | EAC Type:
@@ -46,13 +47,6 @@
         | Tree location:
     div(class="8u 12u(mobile)")
         input(type='text', id='dataTLoc', placeholder='Tree Location')
-
-.row(class='50%')
-    div(class='4u 12u(mobile) pull-left')
-        | Photo:
-    div(class="8u 12u(mobile)")
-        iframe#iframeFileUpload
-
 .row(class='50%')
     div(class='4u 12u(mobile) pull-left')
         | Geo-location:

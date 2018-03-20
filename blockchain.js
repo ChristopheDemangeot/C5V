@@ -35,22 +35,22 @@ blockchainObject.MustUseBlockchain = true;
 
 async function waitBlock(transactionHash) {
     while (true) {
-      let receipt = blockchainObject.Web3Instance.eth.getTransactionReceipt(transactionHash);
-      if (receipt && receipt.contractAddress) {
-        blockchainObject.ContractAddress = receipt.contractAddress;
-        console.log('prepareSmartContract: Contract deployed SUCCESSFULLY!');
-        console.log('prepareSmartContract: Contract instance address: ' + receipt.contractAddress);
-        console.log("prepareSmartContract: Smart contract mined!");
-        break;
-      }
-      console.log("prepareSmartContract: Waiting a mined block to include contract... currently in block " + blockchainObject.Web3Instance.eth.blockNumber);
-      await sleep(1000);
+        let receipt = blockchainObject.Web3Instance.eth.getTransactionReceipt(transactionHash);
+        if (receipt && receipt.contractAddress) {
+            blockchainObject.ContractAddress = receipt.contractAddress;
+            console.log('prepareSmartContract: Contract deployed SUCCESSFULLY!');
+            console.log('prepareSmartContract: Contract instance address: ' + receipt.contractAddress);
+            console.log("prepareSmartContract: Smart contract mined!");
+            break;
+        }
+        console.log("prepareSmartContract: Waiting a mined block to include contract... currently in block " + blockchainObject.Web3Instance.eth.blockNumber);
+        await sleep(1000);
     }
-  }
+}
 
 function testContract() {
     console.log('testContract: ENTER');
-    if(blockchainObject.IsContractDeployed) {
+    if (blockchainObject.IsContractDeployed) {
         var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
         // We assume that call contract have a method called: testIsAlive   
         var result = contractInstance.isAlive();
@@ -103,7 +103,7 @@ function prepareSmartContract() {
                 });
                 console.log('prepareSmartContract: Contract instance created');
 
-                if(contractInstance.transactionHash != undefined) {
+                if (contractInstance.transactionHash != undefined) {
                     blockchainObject.ContractTransactionHash = contractInstance.transactionHash;
                     console.log('prepareSmartContract: Contract instance hash: ' + blockchainObject.ContractTransactionHash);
                     waitBlock(blockchainObject.ContractTransactionHash);
@@ -146,7 +146,7 @@ blockchainObject.DeployContract = function () {
     }
 }
 blockchainObject.GetInformation = function () {
-    console.log('API - GetInformation: retrieving information for: ' + blockchainObject.ContractName + ' on '+ blockchainObject.GetBlockchainUrl());
+    console.log('API - GetInformation: retrieving information for: ' + blockchainObject.ContractName + ' on ' + blockchainObject.GetBlockchainUrl());
     return {
         BCUrl: getBlockchainUrl(),
         BCIsRunning: blockchainObject.IsBlockchainRunning(),
@@ -156,26 +156,26 @@ blockchainObject.GetInformation = function () {
         BCContractTransactionHash: blockchainObject.ContractTransactionHash
     };
 }
-blockchainObject.TestContract = function() {
-    console.log('BCJS - TestContract: Test for ' + blockchainObject.ContractName + ' on '+ getBlockchainUrl());
+blockchainObject.TestContract = function () {
+    console.log('BCJS - TestContract: Test for ' + blockchainObject.ContractName + ' on ' + getBlockchainUrl());
     var result = testContract();
     console.log('BCJS - TestContract: Call back results -> ' + result);
     return {
-        TestResult: result            
+        TestResult: result
     };
 }
-blockchainObject.GetBlockNumber = function() {
+blockchainObject.GetBlockNumber = function () {
     console.log('BCJS - GetBlockNumber on ' + getBlockchainUrl());
     var res = getBlockNumber();
     console.log('BCJS - GetBlockNumber: ' + res);
     return {
-        BlockNumber: res            
-    };    
+        BlockNumber: res
+    };
 }
 
- /* FAKE CALLS */
+/* FAKE CALLS */
 
- /* Common */
+/* Common */
 function getRandomWei() {
     return (Math.floor(Math.random() * Math.floor(1000)) / 10000) + ' wei';
 }
@@ -197,7 +197,7 @@ localEACTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Clima
 localEACTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Fire' });
 localEACTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Soil Erosion' });
 
-blockchainObject.GetEACTypeList = function() {
+blockchainObject.GetEACTypeList = function () {
     console.log('BCJS - GetEACTypeList: ' + localEACTypeList.objectList.length);
     return localEACTypeList;
 }
@@ -214,11 +214,11 @@ localUserTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Proj
 localUserTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Local Bio Diversity Stewards of tribe' });
 localUserTypeList.objectList.push({ objectID: getRamdomHash(), objectName: 'Local Community Stewards of tribe' });
 
-blockchainObject.GetUserTypeList = function() {
+blockchainObject.GetUserTypeList = function () {
     console.log('BCJS - GeUserTypeList: ' + localUserTypeList.objectList.length);
     return localUserTypeList;
 }
-blockchainObject.GetUserTypeByID = function(objectID) {
+blockchainObject.GetUserTypeByID = function (objectID) {
     console.log('BCJS - GetUserTypeByID: ' + objectID);
     var result = {
         objectList: [],
@@ -230,9 +230,9 @@ blockchainObject.GetUserTypeByID = function(objectID) {
         objectName: 'NOT FOUND'
     };
     var list = blockchainObject.GetUserTypeList();
-    for(var i=0; i<list.objectList.length; i++) {
+    for (var i = 0; i < list.objectList.length; i++) {
         var curUserType = list.objectList[i];
-        if(curUserType.objectID.toString() == objectID) {
+        if (curUserType.objectID.toString() == objectID) {
             selectedUserType = curUserType;
         }
     }
@@ -246,31 +246,31 @@ var localTribeList = {
     transactionHash: getRamdomHash(),
     gasPrice: getRandomWei()
 };
-blockchainObject.GetTribeList = function() {
+blockchainObject.GetTribeList = function () {
     console.log('BCJS - GetTribeList: ENTER');
 
-    if(blockchainObject.MustUseBlockchain) {
+    if (blockchainObject.MustUseBlockchain) {
         var res = {
             objectList: [],
             transactionHash: getRamdomHash(),
             gasPrice: getRandomWei()
         };
-    
-        if(blockchainObject.IsContractDeployed) {
+
+        if (blockchainObject.IsContractDeployed) {
             var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
             // We assume that call contract have a method called: testIsAlive   
             var tribeAddressList = contractInstance.getTribeAddressList();
             var nbTribes = tribeAddressList.length;
             console.log('BCJS - GetTribeList: Number of Tribe addresses found: ' + tribeAddressList.length);
-            if(nbTribes > 0) {
-                for(var i=0; i<nbTribes; i++) {
+            if (nbTribes > 0) {
+                for (var i = 0; i < nbTribes; i++) {
                     var curTribe = contractInstance.getTribeByAddress(tribeAddressList[i]);
                     res.objectList.push(
                         {
                             objectID: tribeAddressList[i],
                             objectName: curTribe[1],
                             tribeLocation: curTribe[2],
-                            tribePopulation:curTribe[3],
+                            tribePopulation: curTribe[3],
                             tribeArea: curTribe[4]
                         });
                 }
@@ -286,7 +286,7 @@ blockchainObject.GetTribeList = function() {
         return localTribeList;
     }
 }
-blockchainObject.GetTribeByID = function(objectID) {
+blockchainObject.GetTribeByID = function (objectID) {
     console.log('BCJS - GetTribeByID: ' + objectID);
 
     var result = {
@@ -295,8 +295,8 @@ blockchainObject.GetTribeByID = function(objectID) {
         gasPrice: getRandomWei()
     };
 
-    if(blockchainObject.MustUseBlockchain) {
-        if(blockchainObject.IsContractDeployed) {
+    if (blockchainObject.MustUseBlockchain) {
+        if (blockchainObject.IsContractDeployed) {
             var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
 
             // Calls the method
@@ -308,7 +308,7 @@ blockchainObject.GetTribeByID = function(objectID) {
                     objectID: objectID,
                     objectName: curTribe[1],
                     tribeLocation: curTribe[2],
-                    tribePopulation:curTribe[3],
+                    tribePopulation: curTribe[3],
                     tribeArea: curTribe[4]
                 });
             console.log('BCJS - GetTribeByID: Response populated');
@@ -324,9 +324,9 @@ blockchainObject.GetTribeByID = function(objectID) {
             tribeArea: 'NOT FOUND'
         };
         var list = blockchainObject.GetTribeList();
-        for(var i=0; i<list.objectList.length; i++) {
+        for (var i = 0; i < list.objectList.length; i++) {
             var curTribe = list.objectList[i];
-            if(curTribe.objectID.toString() == objectID) {
+            if (curTribe.objectID.toString() == objectID) {
                 selectedTribe = curTribe;
             }
         }
@@ -336,11 +336,11 @@ blockchainObject.GetTribeByID = function(objectID) {
     console.log('BCJS - GetTribeByID: Found ' + objectID);
     return result;
 }
-blockchainObject.CreateNewTribe = function(body) {
+blockchainObject.CreateNewTribe = function (body) {
     console.log('BCJS - CreateNewTribe: Adding new Tribe ' + body.objectName);
 
-    if(blockchainObject.MustUseBlockchain) {
-        if(blockchainObject.IsContractDeployed) {
+    if (blockchainObject.MustUseBlockchain) {
+        if (blockchainObject.IsContractDeployed) {
             var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
 
             // Create a new account
@@ -363,13 +363,13 @@ blockchainObject.CreateNewTribe = function(body) {
             console.log('BCJS - CreateNewTribe: Value to transfer:  ' + valueToTransferEth + ' eth');
 
             // http://www.bullraider.com/ethereum/tutorials/342-understanding-invalid-address-error-in-dapps-or-geth-console
-            blockchainObject.Web3Instance.personal.unlockAccount(newAccountAddress,body.objectName,100000);
-            blockchainObject.Web3Instance.eth.sendTransaction({from: blockchainObject.Web3Instance.eth.coinbase, to: newAccountAddress, value: valueToTransfer});
+            blockchainObject.Web3Instance.personal.unlockAccount(newAccountAddress, body.objectName, 100000);
+            blockchainObject.Web3Instance.eth.sendTransaction({ from: blockchainObject.Web3Instance.eth.coinbase, to: newAccountAddress, value: valueToTransfer });
             console.log('BCJS - CreateNewTribe: Value transfered to:  ' + newAccountAddress);
 
             // Calls the method
             console.log('BCJS - CreateNewTribe: About to create new Tribe with name: ' + body.objectName);
-            var tribeIndex = contractInstance.createTribe(body.objectName, body.tribeLocation, body.tribePopulation, body.tribeArea, {from: newAccountAddress, gas: maxGas});
+            var tribeIndex = contractInstance.createTribe(body.objectName, body.tribeLocation, body.tribePopulation, body.tribeArea, { from: newAccountAddress, gas: maxGas });
             console.log('BCJS - CreateNewTribe: New Tribe created in Blockchain!');
 
             console.log('BCJS - CreateNewTribe: New tribe index ' + tribeIndex);
@@ -386,30 +386,30 @@ blockchainObject.CreateNewTribe = function(body) {
                 tribePopulation: body.tribePopulation,
                 tribeArea: body.tribeArea
             });
-            list.transactionHash = getRamdomHash();
-            list.gasPrice = getRandomWei();
+        list.transactionHash = getRamdomHash();
+        list.gasPrice = getRandomWei();
         console.log('BCJS - CreateNewTribe: New tribe added ' + body.objectName);
         return localTribeList;
     }
 }
-blockchainObject.UpdateTribe = function(body) {
+blockchainObject.UpdateTribe = function (body) {
     console.log('BCJS - UpdateTribe: Updating Tribe ' + body.objectName);
     var list = blockchainObject.GetTribeList();
-    if(blockchainObject.MustUseBlockchain) {
-        if(blockchainObject.IsContractDeployed) {
-            for(var i=0; i<list.objectList.length; i++) {
+    if (blockchainObject.MustUseBlockchain) {
+        if (blockchainObject.IsContractDeployed) {
+            for (var i = 0; i < list.objectList.length; i++) {
                 var curTribe = list.objectList[i];
-                if(curTribe.objectID.toString() == body.objectID) {
+                if (curTribe.objectID.toString() == body.objectID) {
                     var objectID = body.objectID;
                     var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
                     console.log('BCJS - UpdateTribe: About to update Tribe at address: ' + objectID);
 
                     var gasPrice = Number(blockchainObject.Web3Instance.eth.gasPrice);
                     console.log('BCJS - UpdateTribe: Gas Price currently at:  ' + gasPrice + ' wei');
-        
+
                     var callGas = Number(contractInstance.updateTribe.estimateGas(objectID, body.objectName, body.tribeLocation, body.tribePopulation, body.tribeArea));
                     console.log('BCJS - UpdateTribe: Estimated Gas for call:  ' + callGas + ' units');
-        
+
                     var estCostWei = (gasPrice * callGas);
                     var estCostEth = blockchainObject.Web3Instance.fromWei(estCostWei, 'ether');
                     console.log('BCJS - UpdateTribe: Estimate cost:  ' + estCostWei + ' wei');
@@ -419,14 +419,14 @@ blockchainObject.UpdateTribe = function(body) {
                     console.log('BCJS - UpdateTribe: Value to transfer:  ' + valueToTransfer + ' wei');
                     console.log('BCJS - UpdateTribe: Value to transfer:  ' + valueToTransferEth + ' eth');
 
-                    blockchainObject.Web3Instance.eth.sendTransaction({from: blockchainObject.Web3Instance.eth.coinbase, to: objectID, value: valueToTransfer});
+                    blockchainObject.Web3Instance.eth.sendTransaction({ from: blockchainObject.Web3Instance.eth.coinbase, to: objectID, value: valueToTransfer });
                     console.log('BCJS - UpdateTribe: Value transfered to:  ' + objectID);
-        
+
                     // Calls the method
                     console.log('BCJS - UpdateTribe: About to update Tribe with new name: ' + body.objectName);
-                    contractInstance.updateTribe(objectID, body.objectName, body.tribeLocation, body.tribePopulation, body.tribeArea, {from: objectID, gas: maxGas});
+                    contractInstance.updateTribe(objectID, body.objectName, body.tribeLocation, body.tribePopulation, body.tribeArea, { from: objectID, gas: maxGas });
 
-                     console.log('BCJS - UpdateTribe: Tribe updated in Blockchain!');
+                    console.log('BCJS - UpdateTribe: Tribe updated in Blockchain!');
 
                     break;
                 }
@@ -435,11 +435,11 @@ blockchainObject.UpdateTribe = function(body) {
             console.log('BCJS - UpdateTribe: Response populated');
         } else {
             console.log('BCJS - UpdateTribe: C5VContract not deployed');
-        }     
+        }
     } else {
-        for(var i=0; i<list.objectList.length; i++) {
+        for (var i = 0; i < list.objectList.length; i++) {
             var curTribe = list.objectList[i];
-            if(curTribe.objectID.toString() == body.objectID) {
+            if (curTribe.objectID.toString() == body.objectID) {
                 list.objectList[i].objectName = body.objectName;
                 list.objectList[i].tribeLocation = body.tribeLocation;
                 list.objectList[i].tribePopulation = body.tribePopulation;
@@ -454,11 +454,11 @@ blockchainObject.UpdateTribe = function(body) {
     console.log('BCJS - UpdateTribe: Tribe updated ' + body.objectName);
     return list;
 }
-blockchainObject.DeleteTribe = function(objectID) {
+blockchainObject.DeleteTribe = function (objectID) {
     console.log('BCJS - DeleteTribe: Deleting Tribe ' + objectID);
     var list = blockchainObject.GetTribeList();
-    if(blockchainObject.MustUseBlockchain) {
-        if(blockchainObject.IsContractDeployed) {
+    if (blockchainObject.MustUseBlockchain) {
+        if (blockchainObject.IsContractDeployed) {
             var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
             console.log('BCJS - DeleteTribe: About to delete Tribe at address: ' + objectID);
 
@@ -477,23 +477,23 @@ blockchainObject.DeleteTribe = function(objectID) {
             console.log('BCJS - DeleteTribe: Value to transfer:  ' + valueToTransfer + ' wei');
             console.log('BCJS - DeleteTribe: Value to transfer:  ' + valueToTransferEth + ' eth');
 
-            blockchainObject.Web3Instance.eth.sendTransaction({from: blockchainObject.Web3Instance.eth.coinbase, to: objectID, value: valueToTransfer});
+            blockchainObject.Web3Instance.eth.sendTransaction({ from: blockchainObject.Web3Instance.eth.coinbase, to: objectID, value: valueToTransfer });
             console.log('BCJS - DeleteTribe: Value transfered to:  ' + objectID);
 
             // Calls the method
             console.log('BCJS - DeleteTribe: About to delete Tribe with address: ' + objectID);
-            contractInstance.deleteTribe(objectID, {from: objectID, gas: maxGas});
+            contractInstance.deleteTribe(objectID, { from: objectID, gas: maxGas });
 
-             console.log('BCJS - DeleteTribe: Tribe deleted in Blockchain!');
-             list = blockchainObject.GetTribeList();
+            console.log('BCJS - DeleteTribe: Tribe deleted in Blockchain!');
+            list = blockchainObject.GetTribeList();
         } else {
             console.log('BCJS - DeleteTribe: C5VContract not deployed');
         }
     } else {
-        for(var i=0; i<list.objectList.length; i++) {
+        for (var i = 0; i < list.objectList.length; i++) {
             var curTribe = list.objectList[i];
-            if(curTribe.objectID.toString() == objectID) {
-                list.objectList.splice(i,1);
+            if (curTribe.objectID.toString() == objectID) {
+                list.objectList.splice(i, 1);
                 break;
             }
         }
@@ -510,13 +510,13 @@ var localUserList = {
     transactionHash: getRamdomHash(),
     gasPrice: getRandomWei()
 };
-blockchainObject.GetUserList = function() {
+blockchainObject.GetUserList = function () {
     console.log('BCJS - GetUserList: ' + localUserList.objectList.length);
     localUserList.transactionHash = getRamdomHash();
     localUserList.gasPrice = getRandomWei();
     return localUserList;
 }
-blockchainObject.GetUserByID = function(objectID) {
+blockchainObject.GetUserByID = function (objectID) {
     console.log('BCJS - GetUserByID: ' + objectID);
     var result = {
         objectList: [],
@@ -533,9 +533,9 @@ blockchainObject.GetUserByID = function(objectID) {
         tribeID: 'NOT FOUND'
     };
     var list = blockchainObject.GetUserList();
-    for(var i=0; i<list.objectList.length; i++) {
+    for (var i = 0; i < list.objectList.length; i++) {
         var curUser = list.objectList[i];
-        if(curUser.objectID.toString() == objectID) {
+        if (curUser.objectID.toString() == objectID) {
             selectedUser = curUser;
         }
     }
@@ -545,7 +545,7 @@ blockchainObject.GetUserByID = function(objectID) {
     console.log('BCJS - GetUserByID: Found ' + objectID);
     return result;
 }
-blockchainObject.CreateNewUser = function(body) {
+blockchainObject.CreateNewUser = function (body) {
     console.log('BCJS - CreateNewUser: Adding new User ' + body.objectName);
     var list = blockchainObject.GetUserList();
     list.objectList.push(
@@ -558,17 +558,17 @@ blockchainObject.CreateNewUser = function(body) {
             userTypeID: body.userTypeID,
             tribeID: body.tribeID
         });
-        list.transactionHash = getRamdomHash();
-        list.gasPrice = getRandomWei();
+    list.transactionHash = getRamdomHash();
+    list.gasPrice = getRandomWei();
     console.log('BCJS - CreateNewUser: New User added ' + body.objectName);
     return list;
 }
-blockchainObject.UpdateUser = function(body) {
+blockchainObject.UpdateUser = function (body) {
     console.log('BCJS - UpdateUser: Updating User ' + body.objectName);
     var list = blockchainObject.GetUserList();
-    for(var i=0; i<list.objectList.length; i++) {
+    for (var i = 0; i < list.objectList.length; i++) {
         var curUser = list.objectList[i];
-        if(curUser.objectID.toString() == body.objectID) {
+        if (curUser.objectID.toString() == body.objectID) {
             list.objectList[i].objectName = body.objectName;
             list.objectList[i].userEmail = body.userEmail;
             list.objectList[i].userPassword = body.userPassword;
@@ -583,13 +583,13 @@ blockchainObject.UpdateUser = function(body) {
     console.log('BCJS - UpdateUser: User updated ' + body.objectName);
     return list;
 }
-blockchainObject.DeleteUser = function(objectID) {
+blockchainObject.DeleteUser = function (objectID) {
     console.log('BCJS - DeleteUser: Deleting User ' + objectID);
     var list = blockchainObject.GetUserList();
-    for(var i=0; i<list.objectList.length; i++) {
+    for (var i = 0; i < list.objectList.length; i++) {
         var curUser = list.objectList[i];
-        if(curUser.objectID.toString() == objectID) {
-            list.objectList.splice(i,1);
+        if (curUser.objectID.toString() == objectID) {
+            list.objectList.splice(i, 1);
             break;
         }
     }
@@ -605,30 +605,69 @@ var localDataList = {
     transactionHash: getRamdomHash(),
     gasPrice: getRandomWei()
 };
-blockchainObject.GetDataEntryList = function() {
+blockchainObject.GetDataEntryList = function () {
     console.log('BCJS - GetDataEntryList: ' + localDataList.objectList.length);
     localDataList.transactionHash = getRamdomHash();
     localDataList.gasPrice = getRandomWei();
     return localDataList;
 }
-blockchainObject.CreateNewDataEntry = function(body) {
+blockchainObject.CreateNewDataEntry = function (body) {
     console.log('BCJS - CreateNewDataEntry: Adding new Data Entry');
-    localDataList.objectList.push(
-        {
-            objectID: getRamdomHash(),
-            userID: body.userID,
-            eacTypeID: body.eacTypeID,
-            dataDBH: body.dataDBH,
-            dataTClass: body.dataTClass,
-            dataTCount: body.dataTCount,
-            dataTHeight: body.dataTHeight,
-            dataTMorality: body.dataTMorality,
-            dataTLoc: body.dataTLoc,
-            dataGLoc: body.dataGLoc,
-            timeStamp: new Date().toISOString()
-        });
-        localDataList.transactionHash = getRamdomHash();
-        localDataList.gasPrice = getRandomWei();
+
+    if (blockchainObject.MustUseBlockchain) {
+        if (blockchainObject.IsContractDeployed) {
+            var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
+            console.log('BCJS - CreateNewDataEntry: About to add entry for Tribe at address: ' + body.tribeID);
+
+            var gasPrice = Number(blockchainObject.Web3Instance.eth.gasPrice);
+            console.log('BCJS - CreateNewDataEntry: Gas Price currently at:  ' + gasPrice + ' wei');
+
+            var estGasReturn = contractInstance.addDataEntryForTribe.estimateGas(
+                body.tribeID, body.userID, body.eacTypeID, body.dataDBH, body.dataTClass, parseInt(body.dataTCount), parseInt(body.dataTHeight),
+                body.dataTMorality, body.dataTLoc, body.dataGLoc, new Date().toISOString());
+            var callGas = Number(estGasReturn);
+            console.log('BCJS - CreateNewDataEntry: Estimated Gas for call:  ' + callGas + ' units');
+
+            var estCostWei = (gasPrice * callGas);
+            var estCostEth = blockchainObject.Web3Instance.fromWei(estCostWei, 'ether');
+            console.log('BCJS - CreateNewDataEntry: Estimate cost:  ' + estCostWei + ' wei');
+            console.log('BCJS - CreateNewDataEntry: Estimate cost:  ' + estCostEth + ' eth');
+            var valueToTransfer = (estCostWei * 4);
+            var valueToTransferEth = blockchainObject.Web3Instance.fromWei(valueToTransfer, 'ether');
+            console.log('BCJS - CreateNewDataEntry: Value to transfer:  ' + valueToTransfer + ' wei');
+            console.log('BCJS - CreateNewDataEntry: Value to transfer:  ' + valueToTransferEth + ' eth');
+
+            blockchainObject.Web3Instance.eth.sendTransaction({ from: blockchainObject.Web3Instance.eth.coinbase, to: body.tribeID, value: valueToTransfer });
+            console.log('BCJS - CreateNewDataEntry: Value transfered to:  ' + body.tribeID);
+
+            // Calls the method
+            console.log('BCJS - CreateNewDataEntry: About to add data entry for Tribe with address: ' + body.tribeID);
+            contractInstance.addDataEntryForTribe(body.tribeID, body.userID, body.eacTypeID, body.dataDBH, body.dataTClass, body.dataTCount, body.dataTHeight,
+                body.dataTMorality, body.dataTLoc, body.dataGLoc, new Date().toISOString(), { from: body.tribeID, gas: maxGas });
+
+            console.log('BCJS - CreateNewDataEntry: New data entry added!');
+        } else {
+            console.log('BCJS - DeleteTribe: C5VContract not deployed');            
+        }
+    } else {
+        localDataList.objectList.push(
+            {
+                objectID: getRamdomHash(),
+                userID: body.userID,
+                tribeID: body.tribeID,
+                eacTypeID: body.eacTypeID,
+                dataDBH: body.dataDBH,
+                dataTClass: body.dataTClass,
+                dataTCount: body.dataTCount,
+                dataTHeight: body.dataTHeight,
+                dataTMorality: body.dataTMorality,
+                dataTLoc: body.dataTLoc,
+                dataGLoc: body.dataGLoc,
+                timeStamp: new Date().toISOString()
+            });
+    }
+    localDataList.transactionHash = getRamdomHash();
+    localDataList.gasPrice = getRandomWei();
     console.log('BCJS - CreateNewDataEntry: New Data Entry added');
     return localDataList;
 }

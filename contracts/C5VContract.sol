@@ -117,4 +117,14 @@ contract C5VContract {
             return (tribeList[tAddress].index, tribeList[tAddress].name,
                 tribeList[tAddress].location, tribeList[tAddress].population, tribeList[tAddress].area);
         }
+    
+    function addDataEntryForTribe(address tAddress, address userID, string eacTypeID,
+        string dataDBH, string dataTClass, uint dataTCount, uint dataTHeight,
+        string dataTMorality, string dataTLoc, string dataGLoc, string timeStamp)
+        public payable {
+            Tribe storage curTribe = tribeList[tAddress];
+            DataEntry memory newDataEntry = DataEntry(userID, eacTypeID, dataDBH, dataTClass, dataTCount,
+                dataTHeight, dataTMorality, dataTLoc, dataGLoc, timeStamp);
+            curTribe.dataList.push(newDataEntry);
+        }
 }
