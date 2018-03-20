@@ -30,7 +30,7 @@ section.wrapper.style4.special.container(class='75%', id='deploySection')
                   span.label(style='color:green;') Deployed!
 section.wrapper.style4.container.special(style='display:none;', id='showStatistics', class='75%')
   .row
-    div(class='6u 12u(narrower)')
+    div(class='6u 12u(narrower)', id='currentBlockDiv')
       section
         header
           h3 Current block
@@ -38,7 +38,7 @@ section.wrapper.style4.container.special(style='display:none;', id='showStatisti
           ul.buttons
             li
               .button.small(id='currentBlock', style='cursor:default;') 0
-    div(class='6u 12u(narrower)')
+    div(class='6u 12u(narrower)', id='testContractDiv')
       section
         header
           h3 Test contract

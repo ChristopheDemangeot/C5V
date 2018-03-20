@@ -61,6 +61,10 @@ function testContract() {
     }
 }
 
+function getBlockNumber() {
+    return blockchainObject.web3Instance.eth.blockNumber;
+}
+
 function prepareSmartContract() {
     console.log('prepareSmartContract: ENTER');
 
@@ -159,6 +163,16 @@ blockchainObject.TestContract = function() {
         TestResult: result            
     };
 }
+
+blockchainObject.GetBlockNumber = function() {
+    console.log('BCJS - GetBlockNumber on ' + getBlockchainUrl());
+    var res = getBlockNumber();
+    console.log('BCJS - GetBlockNumber: ' + res);
+    return {
+        BlockNumber: res            
+    };    
+}
+
  /* FAKE CALLS */
 
  /* Common */

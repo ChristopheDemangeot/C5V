@@ -20,6 +20,12 @@ router.get('/test', function (req, res, next) {
   res.json(testResults);
   console.log('REST[GET]: Leave /api/test');
 });
+router.get('/block', function (req, res, next) {
+  console.log('REST[GET]: Enter /api/block');
+  var result = blockchain.GetBlockNumber();
+  res.json(result);
+  console.log('REST[GET]: Leave /api/block');
+});
 
 /* TRIBES Management*/
 router.get('/tribes', function (req, res, next) {

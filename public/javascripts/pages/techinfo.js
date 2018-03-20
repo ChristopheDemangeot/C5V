@@ -1,3 +1,22 @@
+function getBlockNumber() {
+    $('#currentBlockDiv').pleaseWait();
+    $.ajax({
+        url: "/api/block",
+    }).done(function (data) {
+        if(data.BlockNumber != undefined)  {
+            $('#currentBlock').text(data.BlockNumber);
+        } else {
+            $('#currentBlock').text('-1');
+
+        }
+    }).fail(function() {
+        console.log('FAILED [GET]: /api/block');
+    }).always(function () {
+        $('#currentBlockDiv').pleaseWait('stop');
+        setTimeout(getBlockNumber, 10000);
+    });
+}
+
 function initialisePageView() {
     $('body').pleaseWait();
     $.ajax({
@@ -12,6 +31,7 @@ function initialisePageView() {
                 $('#deployContractRow').hide();
                 $('#alreadyDeployedRow').show();
                 $('#showStatistics').show();
+                getBlockNumber();
             } else {
                 $('#deployContractRow').show();
                 $('#alreadyDeployedRow').hide();
@@ -40,6 +60,7 @@ function deployContract() {
             $('#deployContractRow').hide();
             $('#alreadyDeployedRow').show();
             $('#showStatistics').show();
+            getBlockNumber();
         } else {
             $('#deployContractRow').show();
             $('#alreadyDeployedRow').hide();
@@ -58,21 +79,21 @@ function resetTestContractButton() {
 }
 
 function testContract(){
-    $('#showStatistics').pleaseWait();
+    $('#testContractDiv').pleaseWait();
     $.ajax({
         url: "/api/test",
     }).done(function (data) {
         if(data.TestResult) {
-            $('#testContract').css('background-color:green;');
+            $('#testContract').css('color:green;');
             $('#testContract').val('OK!');
         } else {
-            $('#testContract').css('background-color:red;');
+            $('#testContract').css('color:red;');
             $('#testContract').val('ERROR!');
         }
     }).fail(function() {
         console.log('FAILED [GET]: /api/test');
     }).always(function () {
-        $('#showStatistics').pleaseWait('stop');
+        $('#testContractDiv').pleaseWait('stop');
         setTimeout(resetTestContractButton, 2000);
     });
 }
