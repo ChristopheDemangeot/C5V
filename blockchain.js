@@ -614,42 +614,42 @@ blockchainObject.GetDataEntryList = function () {
 blockchainObject.CreateNewDataEntry = function (body) {
     console.log('BCJS - CreateNewDataEntry: Adding new Data Entry');
 
-    if (blockchainObject.MustUseBlockchain) {
-        if (blockchainObject.IsContractDeployed) {
-            var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
-            console.log('BCJS - CreateNewDataEntry: About to add entry for Tribe at address: ' + body.tribeID);
+    // if (blockchainObject.MustUseBlockchain) {
+    //     if (blockchainObject.IsContractDeployed) {
+    //         var contractInstance = blockchainObject.ContractClass.at(blockchainObject.ContractAddress);
+    //         console.log('BCJS - CreateNewDataEntry: About to add entry for Tribe at address: ' + body.tribeID);
 
-            var gasPrice = Number(blockchainObject.Web3Instance.eth.gasPrice);
-            console.log('BCJS - CreateNewDataEntry: Gas Price currently at:  ' + gasPrice + ' wei');
+    //         var gasPrice = Number(blockchainObject.Web3Instance.eth.gasPrice);
+    //         console.log('BCJS - CreateNewDataEntry: Gas Price currently at:  ' + gasPrice + ' wei');
 
-            var estGasReturn = contractInstance.addDataEntryForTribe.estimateGas(
-                body.tribeID, body.userID, body.eacTypeID, body.dataDBH, body.dataTClass, parseInt(body.dataTCount), parseInt(body.dataTHeight),
-                body.dataTMorality, body.dataTLoc, body.dataGLoc, new Date().toISOString());
-            var callGas = Number(estGasReturn);
-            console.log('BCJS - CreateNewDataEntry: Estimated Gas for call:  ' + callGas + ' units');
+    //         var estGasReturn = contractInstance.addDataEntryForTribe.estimateGas(
+    //             body.tribeID, body.userID, body.eacTypeID, body.dataDBH, body.dataTClass, parseInt(body.dataTCount), parseInt(body.dataTHeight),
+    //             body.dataTMorality, body.dataTLoc, body.dataGLoc, new Date().toISOString());
+    //         var callGas = Number(estGasReturn);
+    //         console.log('BCJS - CreateNewDataEntry: Estimated Gas for call:  ' + callGas + ' units');
 
-            var estCostWei = (gasPrice * callGas);
-            var estCostEth = blockchainObject.Web3Instance.fromWei(estCostWei, 'ether');
-            console.log('BCJS - CreateNewDataEntry: Estimate cost:  ' + estCostWei + ' wei');
-            console.log('BCJS - CreateNewDataEntry: Estimate cost:  ' + estCostEth + ' eth');
-            var valueToTransfer = (estCostWei * 4);
-            var valueToTransferEth = blockchainObject.Web3Instance.fromWei(valueToTransfer, 'ether');
-            console.log('BCJS - CreateNewDataEntry: Value to transfer:  ' + valueToTransfer + ' wei');
-            console.log('BCJS - CreateNewDataEntry: Value to transfer:  ' + valueToTransferEth + ' eth');
+    //         var estCostWei = (gasPrice * callGas);
+    //         var estCostEth = blockchainObject.Web3Instance.fromWei(estCostWei, 'ether');
+    //         console.log('BCJS - CreateNewDataEntry: Estimate cost:  ' + estCostWei + ' wei');
+    //         console.log('BCJS - CreateNewDataEntry: Estimate cost:  ' + estCostEth + ' eth');
+    //         var valueToTransfer = (estCostWei * 4);
+    //         var valueToTransferEth = blockchainObject.Web3Instance.fromWei(valueToTransfer, 'ether');
+    //         console.log('BCJS - CreateNewDataEntry: Value to transfer:  ' + valueToTransfer + ' wei');
+    //         console.log('BCJS - CreateNewDataEntry: Value to transfer:  ' + valueToTransferEth + ' eth');
 
-            blockchainObject.Web3Instance.eth.sendTransaction({ from: blockchainObject.Web3Instance.eth.coinbase, to: body.tribeID, value: valueToTransfer });
-            console.log('BCJS - CreateNewDataEntry: Value transfered to:  ' + body.tribeID);
+    //         blockchainObject.Web3Instance.eth.sendTransaction({ from: blockchainObject.Web3Instance.eth.coinbase, to: body.tribeID, value: valueToTransfer });
+    //         console.log('BCJS - CreateNewDataEntry: Value transfered to:  ' + body.tribeID);
 
-            // Calls the method
-            console.log('BCJS - CreateNewDataEntry: About to add data entry for Tribe with address: ' + body.tribeID);
-            contractInstance.addDataEntryForTribe(body.tribeID, body.userID, body.eacTypeID, body.dataDBH, body.dataTClass, body.dataTCount, body.dataTHeight,
-                body.dataTMorality, body.dataTLoc, body.dataGLoc, new Date().toISOString(), { from: body.tribeID, gas: maxGas });
+    //         // Calls the method
+    //         console.log('BCJS - CreateNewDataEntry: About to add data entry for Tribe with address: ' + body.tribeID);
+    //         contractInstance.addDataEntryForTribe(body.tribeID, body.userID, body.eacTypeID, body.dataDBH, body.dataTClass, body.dataTCount, body.dataTHeight,
+    //             body.dataTMorality, body.dataTLoc, body.dataGLoc, new Date().toISOString(), { from: body.tribeID, gas: maxGas });
 
-            console.log('BCJS - CreateNewDataEntry: New data entry added!');
-        } else {
-            console.log('BCJS - DeleteTribe: C5VContract not deployed');            
-        }
-    } else {
+    //         console.log('BCJS - CreateNewDataEntry: New data entry added!');
+    //     } else {
+    //         console.log('BCJS - DeleteTribe: C5VContract not deployed');            
+    //     }
+    // } else {
         localDataList.objectList.push(
             {
                 objectID: getRamdomHash(),
@@ -665,7 +665,7 @@ blockchainObject.CreateNewDataEntry = function (body) {
                 dataGLoc: body.dataGLoc,
                 timeStamp: new Date().toISOString()
             });
-    }
+    //}
     localDataList.transactionHash = getRamdomHash();
     localDataList.gasPrice = getRandomWei();
     console.log('BCJS - CreateNewDataEntry: New Data Entry added');
