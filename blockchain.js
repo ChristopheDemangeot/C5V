@@ -6,9 +6,9 @@ var Promise = require('promise');
 var waitUntil = require('wait-until');
 var crypto = require('crypto');
 
-var isLocalBlockchain = true;
+var isLocalBlockchain = false;
 var localBlockchainUrl = 'http://localhost:8545';
-var remoteBlockchainUrl = 'https://blabla.azure.net:8545'; // Clearly needs to be updated
+var remoteBlockchainUrl = 'http://c5vasc-dns-reg1.australiaeast.cloudapp.azure.com:8545'; // Clearly needs to be updated
 var smartContractFolder = './contracts';
 var maxGas = 5000000;
 
@@ -31,7 +31,7 @@ blockchainObject.ContractClass = '';
 blockchainObject.ContractAddress = '';
 blockchainObject.ContractTransactionHash = '';
 blockchainObject.Web3Instance = new Web3(new Web3.providers.HttpProvider(getBlockchainUrl()));
-blockchainObject.MustUseBlockchain = true;
+blockchainObject.MustUseBlockchain = false;
 
 async function waitBlock(transactionHash) {
     while (true) {
@@ -386,8 +386,8 @@ blockchainObject.CreateNewTribe = function (body) {
                 tribePopulation: body.tribePopulation,
                 tribeArea: body.tribeArea
             });
-        list.transactionHash = getRamdomHash();
-        list.gasPrice = getRandomWei();
+        localTribeList.transactionHash = getRamdomHash();
+        localTribeList.gasPrice = getRandomWei();
         console.log('BCJS - CreateNewTribe: New tribe added ' + body.objectName);
         return localTribeList;
     }
