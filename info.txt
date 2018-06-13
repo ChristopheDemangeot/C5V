@@ -23,3 +23,16 @@ https://hackernoon.com/ether-purchase-power-df40a38c5a2f
 https://steemit.com/ethereum/@tomshwom/ethereum-gas-how-it-works
 
 https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html
+
+And all the things azure and blockchain:
+
+http://c5vasc-dns-reg1.australiaeast.cloudapp.azure.com/
+http://c5vasc-dns-reg1.australiaeast.cloudapp.azure.com:8545
+https://c5vblockchain.azurewebsites.net
+https://c5vblockchain.scm.azurewebsites.net/ZipDeploy
+
+Ref:
+https://docs.microsoft.com/en-us/azure/app-service/app-service-web-get-started-nodejs
+https://docs.microsoft.com/en-us/cli/azure/get-started-with-azure-cli?view=azure-cli-latest
+https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-windows?view=azure-cli-latest
+https://stackoverflow.com/questions/11461338/getting-error-after-pushing-to-windows-azure-you-do-not-have-permission-to-view?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa

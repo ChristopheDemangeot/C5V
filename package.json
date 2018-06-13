@@ -3,21 +3,21 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./server"
   },
   "dependencies": {
     "array-events": "^1.0.0",
-    "body-parser": "~1.18.2",
+    "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
-    "express": "~4.15.5",
+    "express": "^4.16.3",
     "express-fileupload": "^0.4.0",
     "morgan": "~1.9.0",
-    "npm": "^5.7.1",
+    "npm": "^6.1.0",
     "promise": "^8.0.1",
     "pug": "2.0.0-beta11",
     "serve-favicon": "~2.4.5",
-    "solc": "^0.4.21",
+    "solc": "^0.4.24",
     "wait-until": "0.0.2",
     "web3": "^0.20.6"
   }

@@ -6,15 +6,16 @@ var Promise = require('promise');
 var waitUntil = require('wait-until');
 var crypto = require('crypto');
 
-var isLocalBlockchain = false;
-var localBlockchainUrl = 'http://localhost:8545';
-var remoteBlockchainUrl = 'http://c5vasc-dns-reg1.australiaeast.cloudapp.azure.com:8545'; // Clearly needs to be updated
+var isLocalBlockchain = true;
+var localBlockchainUrl = 'http://localhost:7545';
+var remoteBlockchainUrl = 'http://c5vws3-dns-reg1.australiasoutheast.cloudapp.azure.com:8545';
 var smartContractFolder = './contracts';
 var maxGas = 5000000;
 
 // http://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+    // return undefined;
 }
 
 function getBlockchainUrl() {
@@ -31,7 +32,11 @@ blockchainObject.ContractClass = '';
 blockchainObject.ContractAddress = '';
 blockchainObject.ContractTransactionHash = '';
 blockchainObject.Web3Instance = new Web3(new Web3.providers.HttpProvider(getBlockchainUrl()));
-blockchainObject.MustUseBlockchain = false;
+blockchainObject.MustUseBlockchain = true;
+
+// function waitBlock(transactionHash) {
+//     return true;
+// }
 
 async function waitBlock(transactionHash) {
     while (true) {
@@ -95,6 +100,11 @@ function prepareSmartContract() {
                 var contractClass = blockchainObject.Web3Instance.eth.contract(abi);
                 blockchainObject.ContractClass = contractClass;
                 console.log('prepareSmartContract: Contract class created');
+
+                // if(!isLocalBlockchain) {
+                //     blockchainObject.Web3Instance.personal.unlockAccount(blockchainObject.Web3Instance.eth.coinbase, 'C5Vblockchain38!', 100000);
+                //     // personal.unlockAccount(blockchainObject.Web3Instance.eth.coinbase)
+                // }
 
                 contractInstance = blockchainObject.ContractClass.new({
                     data: '0x' + bytecode,
